@@ -1,0 +1,14 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f172a" />
+      <stop offset="100%" stop-color="#2563eb" />
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#grad)"/>
+  <text x="80" y="220" fill="white" font-size="120" font-family="Inter, Helvetica, Arial, sans-serif" font-weight="700">Gabriel Ludwig</text>
+  <text x="80" y="330" fill="#c7d2fe" font-size="120" font-family="Inter, Helvetica, Arial, sans-serif" font-weight="700">Rivera</text>
+  <text x="80" y="420" fill="#bfdbfe" font-size="34" font-family="Inter, Helvetica, Arial, sans-serif">Software Developer · IT Student · Systems Builder</text>
+  <text x="80" y="470" fill="#cbd5f5" font-size="28" font-family="Inter, Helvetica, Arial, sans-serif">Premium, Gen-Z inspired portfolio crafted with MERN + shadcn/ui</text>
+</svg>
+

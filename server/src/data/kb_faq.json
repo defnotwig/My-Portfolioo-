@@ -1,0 +1,52 @@
+[
+  {
+    "id": "contact",
+    "keywords": ["contact", "how to reach", "how do i contact", "email", "phone", "linkedin", "github"],
+    "answer": "Contact Gabriel: GitHub — https://github.com/defnotwig, LinkedIn — https://www.linkedin.com/in/glrrivera/, Email — ludwigrivera13@gmail.com, Phone — 09942372275."
+  },
+  {
+    "id": "education",
+    "keywords": ["school", "college", "education", "degree", "bs", "bachelor", "where did he study"],
+    "answer": "Gabriel is pursuing a BS in Information Technology at the City College of Calamba (2022–Present)."
+  },
+  {
+    "id": "resume",
+    "keywords": ["resume", "cv", "download resume", "portfolio pdf"],
+    "answer": "A downloadable resume isn't provided directly on the portfolio. You can find Gabriel's public work on GitHub (https://github.com/defnotwig) and LinkedIn (https://www.linkedin.com/in/glrrivera/); contact him for a formal resume."
+  },
+  {
+    "id": "projects",
+    "keywords": ["projects", "k-wise", "qr attendance", "pc build", "kiosk"],
+    "answer": "Highlighted projects: K-WISE PC Builder Kiosk, QR Attendance Tracker (C# WinForms), PC Build Optimizer (AI-guided). Ask for a specific project to get more details."
+  },
+  {
+    "id": "skills",
+    "keywords": ["skills", "tech stack", "tech", "react", "node", "javascript"],
+    "answer": "Tech highlights: Frontend — JavaScript, React.js, HTML, CSS; Backend & DB — Node.js, Express.js, MySQL/Postgres/MongoDB; Tools — VSCode, Git/GitHub; AI & Systems — LLMs, prompt engineering, Ollama DeepSeek."
+  },
+  {
+    "id": "availability",
+    "keywords": ["available", "hire", "open to work", "freelance", "availability"],
+    "answer": "Availability for work or freelance is not explicitly listed. For inquiries, please reach out via GitHub/LinkedIn/email and Gabriel will respond if available."
+  },
+  {
+    "id": "certifications",
+    "keywords": ["certifications", "certificate", "huawei", "google", "oracle", "testdome"],
+    "answer": "Certifications mentioned: Huawei Developer Expert, Generative AI Leader (Google), Generative AI Professional (Oracle), Software Engineering (TestDome)."
+  },
+  {
+    "id": "location",
+    "keywords": ["where", "location", "city", "calamba", "philippines"],
+    "answer": "Gabriel is based in Calamba, Philippines. For timezone-specific scheduling please contact him via LinkedIn or email."
+  },
+  {
+    "id": "public_repo",
+    "keywords": ["github", "repo", "repository", "source code"],
+    "answer": "Gabriel's public code is at https://github.com/defnotwig — check repositories for project examples and code samples."
+  },
+  {
+    "id": "personal_info_refusal",
+    "keywords": ["age", "how old", "gender", "sex", "pronoun"],
+    "answer": "Personal details such as age or gender are not included in Gabriel's professional portfolio. I can help with skills, projects, education, or contact info."
+  }
+]
