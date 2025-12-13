@@ -1,0 +1,70 @@
+import "dotenv/config";
+import express from "express";
+import cors from "cors";
+import helmet from "helmet";
+import morgan from "morgan";
+
+import { connectDB } from "./config/db.js";
+import { seedContent } from "./data/seedData.js";
+import aboutRoutes from "./routes/aboutRoutes.js";
+import experienceRoutes from "./routes/experienceRoutes.js";
+import projectRoutes from "./routes/projectRoutes.js";
+import certificationRoutes from "./routes/certificationRoutes.js";
+import recommendationRoutes from "./routes/recommendationRoutes.js";
+import chatRoutes from "./routes/chatRoutes.js";
+import kbRoutes from "./routes/kbRoutes.js";
+import { errorHandler, notFound } from "./middleware/errorHandler.js";
+
+const app = express();
+
+const allowedOrigins = [
+  process.env.CLIENT_ORIGIN || "http://localhost:3501",
+  "http://localhost:3502",
+  "http://localhost:3503",
+  "http://localhost:4173",
+];
+
+const corsOptions = {
+  origin(origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+};
+
+app.use(cors(corsOptions));
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(helmet());
+app.use(morgan(process.env.NODE_ENV === "production" ? "combined" : "dev"));
+
+app.get("/api/health", (_req, res) => {
+  res.json({ status: "ok" });
+});
+
+app.use("/api/about", aboutRoutes);
+app.use("/api/experience", experienceRoutes);
+app.use("/api/projects", projectRoutes);
+app.use("/api/certifications", certificationRoutes);
+app.use("/api/recommendations", recommendationRoutes);
+app.use("/api/chat", chatRoutes);
+app.use("/api/kb", kbRoutes);
+
+app.use(notFound);
+app.use(errorHandler);
+
+const PORT = process.env.PORT || 5501;
+
+const bootstrap = async () => {
+  await connectDB();
+  await seedContent();
+
+  app.listen(PORT, () => {
+    console.log(`🚀 API ready on http://localhost:${PORT}`);
+  });
+};
+
+bootstrap();
+
