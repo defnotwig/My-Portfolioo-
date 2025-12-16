@@ -52,30 +52,30 @@ export default function ChatWidget() {
     <div className="fixed bottom-6 right-6 z-50">
       <Sheet open={open} onOpenChange={setOpen}>
         <SheetTrigger asChild>
-          <Button size="lg" className="rounded-full px-6 py-6 shadow-2xl hover:shadow-3xl transition-all hover:scale-105">
+          <Button size="lg" className="bg-foreground dark:bg-white/10 dark:border dark:border-white/20 text-background dark:text-white rounded-full px-6 py-6 shadow-2xl hover:shadow-3xl transition-all hover:scale-110 animate-pulse-glow font-medium backdrop-blur-md hover:bg-foreground/80 hover:text-background dark:hover:bg-white/25 dark:hover:text-white">
             <MessageCircle className="mr-2 h-5 w-5" />
             Chat with Gabriel
           </Button>
         </SheetTrigger>
         <SheetContent
-          className="flex h-[80vh] max-h-[600px] w-full flex-col gap-0 p-0 sm:max-w-md glass border-2"
+          className="flex h-[80vh] max-h-[600px] w-full flex-col gap-0 p-0 sm:max-w-md liquid-glass-strong"
           title="Chat with Gabriel"
-          description="Ask me about programming, web dev, or tech!"
+          description="Ask me about anything!"
         >
-          <div className="flex items-center gap-3 border-b px-6 py-5 bg-gradient-to-r from-blue-500/10 to-cyan-500/10 dark:from-blue-500/20 dark:to-cyan-500/20">
-            <Avatar className="h-11 w-11 border-2 border-blue-500/30 shadow-lg">
+          <div className="flex items-center gap-3 border-b border-border/50 liquid-glass px-6 py-5">
+            <Avatar className="h-11 w-11 liquid-glass-strong border-2 border-blue-500/30 shadow-lg ring-2 ring-blue-500/20">
               <AvatarImage src="/images/profile.jpg" alt="Gabriel Ludwig Rivera" />
               <AvatarFallback className="bg-gradient-to-br from-blue-500 to-cyan-500 text-white font-bold">GLR</AvatarFallback>
             </Avatar>
             <div className="flex flex-col gap-1">
-              <p className="text-base font-bold">Chat with Gabriel</p>
+              <p className="text-base font-bold text-foreground">Chat with Gabriel</p>
               <p className="flex items-center gap-1.5 text-xs text-emerald-500 dark:text-emerald-400 font-medium">
                 <span className="inline-block h-2 w-2 rounded-full bg-emerald-500 dark:bg-emerald-400 animate-pulse" />
                 Online
               </p>
             </div>
           </div>
-          <div className="flex-1 space-y-4 overflow-y-auto px-4 py-6 bg-gradient-to-b from-background/50 to-background">
+          <div className="flex-1 space-y-4 overflow-y-auto px-4 py-6">
             {messages.map((msg, idx) => (
               <div
                 key={`${msg.sender}-${idx}`}
@@ -83,7 +83,7 @@ export default function ChatWidget() {
               >
                 <div
                   className={`max-w-[85%] rounded-2xl px-4 py-3 text-sm shadow-md ${msg.sender === "assistant"
-                    ? "glass-card"
+                    ? "liquid-glass-strong border border-white/20 dark:border-white/10 text-foreground/90 dark:text-white/95"
                     : "bg-gradient-to-r from-blue-500 to-cyan-500 text-white font-medium"
                     }`}
                 >
@@ -93,25 +93,25 @@ export default function ChatWidget() {
             ))}
             {loading && (
               <div className="flex justify-start">
-                <div className="max-w-[85%] rounded-2xl px-4 py-3 text-sm glass-card flex items-center gap-2">
+                <div className="max-w-[85%] rounded-2xl px-4 py-3 text-sm liquid-glass-strong border border-white/20 dark:border-white/10 flex items-center gap-2">
                   <Loader2 className="h-4 w-4 animate-spin text-blue-500" />
-                  <span>Thinking...</span>
+                  <span className="text-foreground/90 dark:text-white/95">Thinking...</span>
                 </div>
               </div>
             )}
           </div>
           <form
             onSubmit={sendMessage}
-            className="flex gap-3 border-t px-4 py-4 glass"
+            className="flex gap-3 border-t border-border/50 liquid-glass px-4 py-4"
           >
             <Input
-              placeholder="Ask me about programming, web dev, or tech!"
+              placeholder="Ask me about anything!"
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              className="rounded-full px-5 py-6 text-sm border-2 focus:border-blue-500 transition-colors"
+              className="rounded-full liquid-glass px-5 py-6 text-sm text-foreground placeholder:text-muted-foreground focus:ring-2 focus:ring-blue-500 transition-all"
               maxLength={1000}
             />
-            <Button type="submit" disabled={loading} className="rounded-full px-6 shadow-lg hover:shadow-xl transition-all">
+            <Button type="submit" disabled={loading} className="bg-foreground dark:bg-white/90 text-background dark:text-gray-900 rounded-full px-6 shadow-lg hover:shadow-xl transition-all hover:scale-105 font-medium hover:bg-foreground/80 hover:text-background dark:hover:bg-white dark:hover:text-gray-900">
               {loading ? <Loader2 className="h-5 w-5 animate-spin" /> : "Send"}
             </Button>
           </form>
