@@ -32,7 +32,7 @@ export default function Certifications() {
   return (
     <section id="certifications" className="section-container py-16">
       <div className="mx-auto max-w-4xl">
-        <h2 className="text-2xl font-bold mb-8">Certifications</h2>
+        <h2 className="text-2xl font-bold mb-8 text-foreground">Certifications</h2>
 
         <motion.div
           variants={containerVariants}
@@ -48,16 +48,16 @@ export default function Certifications() {
               href={cert.link}
               target="_blank"
               rel="noopener noreferrer"
-              whileHover={{ y: -4 }}
-              className="group glass-card border-2 p-6 rounded-xl hover:shadow-lg transition-all flex items-start justify-between"
+              whileHover={{ y: -6, scale: 1.02 }}
+              className="group glass-card p-6 transition-all flex items-start justify-between cursor-pointer"
             >
               <div>
-                <h3 className="font-semibold text-lg mb-2 group-hover:underline">
+                <h3 className="font-semibold text-lg mb-2 text-foreground group-hover:text-blue-500 transition-colors">
                   {cert.title}
                 </h3>
                 <p className="text-sm text-muted-foreground">{cert.issuer}</p>
               </div>
-              <ExternalLink className="h-5 w-5 text-muted-foreground group-hover:text-blue-600 transition" />
+              <ExternalLink className="h-5 w-5 text-muted-foreground group-hover:text-blue-500 transition-colors" />
             </motion.a>
           ))}
         </motion.div>

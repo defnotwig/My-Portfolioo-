@@ -1,5 +1,7 @@
 import { Github, Linkedin, Mail, Facebook, Phone } from "lucide-react";
+import { motion } from "framer-motion";
 
+// Social Links Data
 const socials = [
   {
     label: "GitHub",
@@ -18,7 +20,6 @@ const socials = [
   },
   {
     label: "Email",
-    // Opens a new Gmail compose window addressed to Gabriel
     href: "https://mail.google.com/mail/?view=cm&fs=1&to=ludwigrivera13@gmail.com",
     icon: Mail,
   },
@@ -29,28 +30,49 @@ const socials = [
   },
 ];
 
+// Single Container Component with All Social Links
 export default function SocialLinks() {
   return (
-    <section id="contact" className="section-container py-16">
-      <div className="mx-auto max-w-4xl">
-        <h2 className="text-2xl font-bold mb-8">Social Links</h2>
+    <section id="contact" className="section-container py-20">
+      <div className="mx-auto max-w-6xl">
+        <h2 className="text-2xl font-bold mb-8 text-foreground">Connect</h2>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-          {socials.map((social) => (
-            <a
-              key={social.label}
-              href={social.href}
-              target="_blank"
-              rel="noreferrer"
-              className="glass-card border-2 p-6 rounded-xl hover:shadow-lg hover:-translate-y-1 transition-all flex flex-col items-center gap-3 text-center group"
-            >
-              <div className="rounded-full bg-gradient-to-br from-blue-500 to-cyan-500 p-3 shadow-lg group-hover:scale-110 transition">
-                <social.icon className="h-6 w-6 text-white" />
-              </div>
-              <p className="text-sm font-semibold">{social.label}</p>
-            </a>
-          ))}
-        </div>
+        {/* Single Glassmorphism Container */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+          className="liquid-glass-strong p-8 md:p-12"
+        >
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-6">
+            {socials.map((social, index) => {
+              const Icon = social.icon;
+              return (
+                <motion.a
+                  key={social.label}
+                  href={social.href}
+                  target="_blank"
+                  rel="noreferrer"
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.3, delay: index * 0.1 }}
+                  whileHover={{ y: -8, scale: 1.05 }}
+                  className="social-glass-item flex flex-col items-center gap-4 p-6 cursor-pointer"
+                  aria-label={social.label}
+                >
+                  <div className="rounded-full bg-gradient-to-br from-blue-500 to-cyan-500 p-4 shadow-lg group-hover:shadow-xl group-hover:scale-110 transition-all duration-300">
+                    <Icon className="h-6 w-6 text-white" strokeWidth={2} />
+                  </div>
+                  <p className="text-sm font-medium text-foreground/90 dark:text-white/90 group-hover:text-accent transition-colors">
+                    {social.label}
+                  </p>
+                </motion.a>
+              );
+            })}
+          </div>
+        </motion.div>
       </div>
     </section>
   );
