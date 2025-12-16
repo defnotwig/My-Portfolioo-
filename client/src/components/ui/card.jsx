@@ -5,7 +5,7 @@ const Card = forwardRef(({ className, ...props }, ref) => (
   <div
     ref={ref}
     className={cn(
-      "rounded-3xl glass",
+      "rounded-3xl glass text-foreground",
       className
     )}
     {...props}
@@ -19,7 +19,7 @@ const CardHeader = ({ className, ...props }) => (
 );
 
 const CardContent = ({ className, ...props }) => (
-  <div className={cn("p-6 pt-4", className)} {...props} />
+  <div className={cn("p-6 pt-4 text-foreground", className)} {...props} />
 );
 
 export { Card, CardHeader, CardContent };

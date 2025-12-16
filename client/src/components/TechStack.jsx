@@ -28,7 +28,7 @@ export default function TechStack() {
       <div className="mx-auto max-w-3xl">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
-          <h2 className="text-2xl font-bold"> Tech Stack</h2>
+          <h2 className="text-2xl font-bold text-foreground"> Tech Stack</h2>
           <button className="text-sm text-muted-foreground hover:text-foreground transition">
             View All →
           </button>
@@ -52,7 +52,8 @@ export default function TechStack() {
                   <motion.span
                     key={tech}
                     variants={itemVariants}
-                    className="px-4 py-2 text-sm rounded-full border bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition cursor-default"
+                    whileHover={{ scale: 1.05, y: -2 }}
+                    className="px-4 py-2 text-sm rounded-full liquid-glass-btn cursor-default text-foreground"
                   >
                     {tech}
                   </motion.span>
