@@ -29,9 +29,9 @@ export default function Experience({ experience }) {
             className="flex gap-6"
           >
             <div className="flex flex-col items-center">
-              <div className="h-6 w-6 rounded-full border border-white/50 bg-white/60 backdrop-blur-xl" />
+              <div className="h-6 w-6 rounded-full border border-border bg-card/60 backdrop-blur-xl" />
               {index !== experience.length - 1 && (
-                <div className="mt-2 w-px flex-1 bg-white/40 backdrop-blur-sm" />
+                <div className="mt-2 w-px flex-1 bg-border backdrop-blur-sm" />
               )}
             </div>
             <Card className="flex-1">

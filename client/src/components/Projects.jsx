@@ -10,8 +10,8 @@ const projects = [
   {
     name: "Attendance and Payroll Management System",
     description: "Full-stack solution for streamlined attendance tracking and payroll processing",
-    url: "github.com/defnotwig/Attendance-and-Payroll",
-    link: "https://github.com/defnotwig/Attendance-and-Payroll-Management-System",
+    url: "Attendance-and-Payroll-Management-System.vercel.app",
+    link: "https://employee-frontend-eight-rust.vercel.app/",
   },
   {
     name: "Real-Time FX Fee Transparency Widget",
@@ -41,7 +41,7 @@ export default function Projects() {
       <div className="mx-auto max-w-4xl">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
-          <h2 className="text-2xl font-bold">Recent Projects</h2>
+          <h2 className="text-2xl font-bold text-foreground">Recent Projects</h2>
           <button className="text-sm text-muted-foreground hover:text-foreground transition">
             View All →
           </button>
@@ -62,16 +62,16 @@ export default function Projects() {
               href={project.link}
               target="_blank"
               rel="noopener noreferrer"
-              whileHover={{ y: -4 }}
-              className="group rounded-xl border bg-white dark:bg-gray-800 p-6 hover:shadow-lg transition-all"
+              whileHover={{ y: -6, scale: 1.02 }}
+              className="group glass-card p-6 transition-all cursor-pointer"
             >
-              <h3 className="font-semibold text-lg mb-2 group-hover:underline">
+              <h3 className="font-semibold text-lg mb-3 text-foreground group-hover:text-blue-500 transition-colors">
                 {project.name}
               </h3>
-              <p className="text-sm text-muted-foreground mb-4">
+              <p className="text-sm text-muted-foreground mb-4 leading-relaxed">
                 {project.description}
               </p>
-              <span className="inline-block text-xs px-3 py-1.5 rounded-full border text-muted-foreground">
+              <span className="inline-block text-xs px-3 py-1.5 rounded-full liquid-glass-btn text-foreground">
                 {project.url}
               </span>
             </motion.a>
