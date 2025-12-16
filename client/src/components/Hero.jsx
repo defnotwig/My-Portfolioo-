@@ -1,17 +1,53 @@
 import { motion } from "framer-motion";
-import { useState } from "react";
-import { CheckCircle2, Mail, Linkedin, Github, ChevronDown, Moon, Sun } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Mail, Linkedin, Github, ChevronDown, Moon, Sun } from "lucide-react";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 
+// iOS-style verified badge component
+const VerifiedBadge = () => (
+  <svg 
+    className="h-6 w-6 flex-shrink-0" 
+    viewBox="0 0 24 24" 
+    fill="none"
+    aria-label="Verified"
+  >
+    <circle cx="12" cy="12" r="10" fill="#3B82F6" />
+    <path 
+      d="M8 12l2.5 2.5L16 9" 
+      stroke="white" 
+      strokeWidth="2" 
+      strokeLinecap="round" 
+      strokeLinejoin="round"
+    />
+  </svg>
+);
+
+// iOS-style location pin
+const LocationPin = () => (
+  <span className="inline-flex items-center" role="img" aria-label="Location">
+    <svg className="h-4 w-4 mr-1.5 text-muted-foreground" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+    </svg>
+  </span>
+);
+
 export default function Hero({ about }) {
   const [achievementsOpen, setAchievementsOpen] = useState(false);
-  const [theme, setTheme] = useState(() => {
+  const [theme, setTheme] = useState("light");
+
+  // Initialize theme on mount
+  useEffect(() => {
     if (typeof window !== "undefined") {
-      return document.documentElement.classList.contains("dark") ? "dark" : "light";
+      const savedTheme = window.localStorage.getItem("glr-theme") || "light";
+      setTheme(savedTheme);
+      if (savedTheme === "dark") {
+        document.documentElement.classList.add("dark");
+      } else {
+        document.documentElement.classList.remove("dark");
+      }
     }
-    return "light";
-  });
+  }, []);
 
   const toggleTheme = () => {
     const newTheme = theme === "dark" ? "light" : "dark";
@@ -44,13 +80,13 @@ export default function Hero({ about }) {
           transition={{ duration: 0.5 }}
           className="flex justify-start mb-6"
         >
-          <Avatar className="h-32 w-32 border-4 border-white shadow-xl dark:border-gray-700">
+          <Avatar className="h-32 w-32 border-4 border-white dark:border-gray-800 liquid-glass-strong shadow-xl ring-2 ring-blue-500/15">
             <AvatarImage src="/images/profile.jpg" alt={about.name} />
-            <AvatarFallback className="text-2xl font-bold">GLR</AvatarFallback>
+            <AvatarFallback className="text-2xl font-bold bg-gradient-to-br from-blue-500 to-cyan-500 text-white">GLR</AvatarFallback>
           </Avatar>
         </motion.div>
 
-        {/* Name and Dark Mode Toggle */}
+        {/* Name and Verified Badge + Theme Toggle */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -58,30 +94,31 @@ export default function Hero({ about }) {
           className="flex items-center justify-between mb-2"
         >
           <div className="flex items-center gap-2">
-            <h1 className="text-3xl font-bold">{about.name}</h1>
-            <CheckCircle2 className="h-6 w-6 text-blue-500 fill-blue-500" />
+            <h1 className="text-3xl font-bold text-foreground">{about.name}</h1>
+            <VerifiedBadge />
           </div>
           <button
             onClick={toggleTheme}
-            className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-            aria-label="Toggle theme"
+            className="p-2.5 rounded-full liquid-glass-btn hover:scale-110 transition-all"
+            aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
           >
             {theme === "dark" ? (
-              <Sun className="h-5 w-5" />
+              <Sun className="h-5 w-5 text-yellow-400" />
             ) : (
-              <Moon className="h-5 w-5" />
+              <Moon className="h-5 w-5 text-slate-600" />
             )}
           </button>
         </motion.div>
 
-        {/* Location */}
+        {/* Location with iOS-style pin */}
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.3, duration: 0.5 }}
-          className="text-sm text-muted-foreground mb-2"
+          className="text-sm text-muted-foreground mb-2 flex items-center"
         >
-          📍 {about.location}
+          <LocationPin />
+          {about.location}
         </motion.p>
 
         {/* Roles and Achievements Dropdown */}
@@ -89,31 +126,35 @@ export default function Hero({ about }) {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.4, duration: 0.5 }}
-          className="flex items-center justify-between mb-6"
+          className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-6"
         >
-          <p className="text-sm font-medium">
+          <p className="text-sm font-medium text-foreground/85">
             Software Engineer | BSIT Student
           </p>
           <div className="relative">
             <button
               onClick={() => setAchievementsOpen(!achievementsOpen)}
-              className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white text-sm rounded-md hover:bg-blue-700 transition-colors"
+              className="flex items-center gap-2 px-4 py-2.5 liquid-glass-btn text-sm hover:scale-[1.02] transition-all"
             >
-              Ship or Be Shipped 2025 Hackathon Participant
-              <ChevronDown className={`h-4 w-4 transition-transform ${achievementsOpen ? 'rotate-180' : ''}`} />
+              <span className="text-foreground font-medium">Achievements</span>
+              <ChevronDown className={`h-4 w-4 text-muted-foreground transition-transform duration-200 ${achievementsOpen ? 'rotate-180' : ''}`} />
             </button>
             {achievementsOpen && (
-              <div className="absolute top-full right-0 mt-2 w-80 bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 p-4 z-50">
-                <h3 className="font-semibold mb-3">Other Achievements</h3>
-                <ul className="space-y-2">
-                  {achievements.slice(1).map((achievement, idx) => (
-                    <li key={idx} className="text-sm flex items-start gap-2">
-                      <span className="text-blue-500 mt-0.5">•</span>
+              <motion.div 
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="absolute top-full right-0 mt-2 w-80 liquid-glass-strong rounded-2xl p-5 z-50"
+              >
+                <h3 className="font-semibold mb-3 text-foreground text-sm">Achievements & Awards</h3>
+                <ul className="space-y-2.5">
+                  {achievements.map((achievement, idx) => (
+                    <li key={idx} className="text-sm flex items-start gap-2.5 text-foreground">
+                      <span className="text-blue-500 mt-0.5 flex-shrink-0">•</span>
                       <span>{achievement}</span>
                     </li>
                   ))}
                 </ul>
-              </div>
+              </motion.div>
             )}
           </div>
         </motion.div>
@@ -126,8 +167,7 @@ export default function Hero({ about }) {
           className="flex flex-wrap gap-3"
         >
           <Button
-            variant="default"
-            className="rounded-full"
+            className="bg-foreground dark:bg-white/10 dark:border dark:border-white/20 text-background dark:text-white rounded-full px-5 py-2.5 hover:scale-105 hover:bg-foreground/80 hover:text-background dark:hover:bg-white/25 dark:hover:text-white transition-all font-medium backdrop-blur-md"
             asChild
           >
             <a href="mailto:ludwigrivera13@gmail.com">
@@ -137,7 +177,7 @@ export default function Hero({ about }) {
           </Button>
           <Button
             variant="outline"
-            className="rounded-full"
+            className="bg-white/10 dark:bg-white/5 border border-white/20 dark:border-white/10 text-foreground dark:text-white rounded-full px-5 py-2.5 hover:scale-105 hover:bg-white/20 dark:hover:bg-white/10 transition-all font-medium backdrop-blur-md"
             asChild
           >
             <a href="https://www.linkedin.com/in/glrrivera/" target="_blank" rel="noopener noreferrer">
@@ -147,7 +187,7 @@ export default function Hero({ about }) {
           </Button>
           <Button
             variant="outline"
-            className="rounded-full"
+            className="bg-white/10 dark:bg-white/5 border border-white/20 dark:border-white/10 text-foreground dark:text-white rounded-full px-5 py-2.5 hover:scale-105 hover:bg-white/20 dark:hover:bg-white/10 transition-all font-medium backdrop-blur-md"
             asChild
           >
             <a href="https://github.com/defnotwig" target="_blank" rel="noopener noreferrer">
@@ -157,7 +197,7 @@ export default function Hero({ about }) {
           </Button>
           <Button
             variant="outline"
-            className="rounded-full"
+            className="bg-white/10 dark:bg-white/5 border border-white/20 dark:border-white/10 text-foreground dark:text-white rounded-full px-5 py-2.5 hover:scale-105 hover:bg-white/20 dark:hover:bg-white/10 transition-all font-medium backdrop-blur-md"
             asChild
           >
             <a href="/CV_Rivera_Gabriel_Ludwig_R..pdf" download>
