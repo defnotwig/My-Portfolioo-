@@ -11,7 +11,7 @@ const aboutData = {
     tagline:
         "Designing resilient systems with Gen-Z polish, AI-first workflows, and production discipline.",
     paragraphs: [
-        "I'm a third-year BS Information Technology student at the City College of Calamba (2022–Present), building a foundation across web development, database management, and software engineering while shipping real systems for students and organizations.",
+        "I'm a fourth-year BS Information Technology student at the City College of Calamba (2022–Present), building a foundation across web development, database management, and software engineering while shipping real systems for students and organizations.",
         "As Membership and Election Committee Head of the CCC Information Technology Society, I help represent 1,469 BSIT and 509 BSCS students, implementing barcode-based attendance and automated event evaluation flows that cut manual processing time by roughly 70% and drastically improve reporting accuracy.",
         "Previously, I worked in Quality Assurance for Shopee Philippines (Failed Deliveries), where I led end-to-end QA for return logistics and 3PL partners—enforcing strict verification standards, running high-accuracy barcode and item audits, validating parcel integrity, and supporting interdepartmental accountability with clear reporting.",
         "I build systems like the K-WISE PC builder kiosk and QR Attendance Tracker with a focus on determinism, observability, and performance—blending rule engines, databases, and modern UIs so experiences feel both premium and dependable.",
@@ -28,7 +28,7 @@ const aboutData = {
 const experienceData = [
     {
         title: "Membership & Election Committee Head",
-        organization: "Info Tech Society",
+        organization: "Infomation Technology Society",
         timeframe: "2024 – Present",
         description:
             "Leading campus-wide student initiatives, election systems, and process automation for the IT student community.",
@@ -41,14 +41,6 @@ const experienceData = [
         description:
             "Designed and deployed a self-service PC builder kiosk with an AI engine (Ollama DeepSeek R1) and 3,200+ compatibility rules, real-time build validation, and recommendation workflows informed by 32,240 historical compatibility checks.",
         order: 2,
-    },
-    {
-        title: "Developer",
-        organization: "QR Attendance Tracker",
-        timeframe: "2025",
-        description:
-            "Built a Windows application with C# / WinForms to log, monitor, and export attendance using QR badges.",
-        order: 3,
     },
     {
         title: "Quality Assurance — Failed Deliveries",

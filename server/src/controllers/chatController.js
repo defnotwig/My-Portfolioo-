@@ -90,7 +90,7 @@ export const chatWithAssistant = asyncHandler(async (req, res) => {
                       "\n" +
                       "GROUNDING FACTS (do NOT contradict these):\n" +
                       "- Name: Gabriel Ludwig Rivera\n" +
-                      "- Location: Calamba, Philippines\n" +
+                      "- Location: Calamba City, Philippines\n" +
                       "- Roles: Software Developer, IT Student, Systems Builder\n" +
                       "- Education: BS Information Technology, City College of Calamba (2022–Present)\n" +
                       "- Experience:\n" +
