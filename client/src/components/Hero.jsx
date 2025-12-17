@@ -82,22 +82,22 @@ export default function Hero({ about }) {
         >
           <div className="relative h-32 w-32">
             {/* Light mode default */}
-            <Avatar className="h-32 w-32 border-4 border-white dark:border-gray-800 liquid-glass-strong shadow-xl ring-2 ring-blue-500/15 absolute inset-0 transition-opacity duration-300 group-hover:opacity-0 dark:opacity-0">
+            <Avatar className="h-32 w-32 border-4 border-white dark:border-gray-800 liquid-glass-strong shadow-xl ring-2 ring-blue-500/15 absolute inset-0 transition-opacity duration-300 group-hover:opacity-0 dark:opacity-0 dark:pointer-events-none">
               <AvatarImage src="/images/profile.jpg" alt={about.name} />
               <AvatarFallback className="text-2xl font-bold bg-gradient-to-br from-blue-500 to-cyan-500 text-white">GLR</AvatarFallback>
             </Avatar>
             {/* Light mode hover */}
-            <Avatar className="h-32 w-32 border-4 border-white dark:border-gray-800 liquid-glass-strong shadow-xl ring-2 ring-blue-500/15 absolute inset-0 transition-opacity duration-300 opacity-0 group-hover:opacity-100 dark:opacity-0 dark:group-hover:opacity-0">
+            <Avatar className="h-32 w-32 border-4 border-white dark:border-gray-800 liquid-glass-strong shadow-xl ring-2 ring-blue-500/15 absolute inset-0 transition-opacity duration-300 opacity-0 group-hover:opacity-100 dark:opacity-0 dark:pointer-events-none pointer-events-none group-hover:pointer-events-auto">
               <AvatarImage src="/images/me formal hover.png" alt={about.name} />
               <AvatarFallback className="text-2xl font-bold bg-gradient-to-br from-blue-500 to-cyan-500 text-white">GLR</AvatarFallback>
             </Avatar>
             {/* Dark mode default */}
-            <Avatar className="h-32 w-32 border-4 border-white dark:border-gray-800 liquid-glass-strong shadow-xl ring-2 ring-blue-500/15 absolute inset-0 transition-opacity duration-300 opacity-0 dark:opacity-100 dark:group-hover:opacity-0">
+            <Avatar className="h-32 w-32 border-4 border-white dark:border-gray-800 liquid-glass-strong shadow-xl ring-2 ring-blue-500/15 absolute inset-0 transition-opacity duration-300 opacity-0 dark:opacity-100 dark:group-hover:opacity-0 pointer-events-none dark:pointer-events-auto">
               <AvatarImage src="/images/me formal black.png" alt={about.name} />
               <AvatarFallback className="text-2xl font-bold bg-gradient-to-br from-blue-500 to-cyan-500 text-white">GLR</AvatarFallback>
             </Avatar>
             {/* Dark mode hover */}
-            <Avatar className="h-32 w-32 border-4 border-white dark:border-gray-800 liquid-glass-strong shadow-xl ring-2 ring-blue-500/15 absolute inset-0 transition-opacity duration-300 opacity-0 dark:group-hover:opacity-100">
+            <Avatar className="h-32 w-32 border-4 border-white dark:border-gray-800 liquid-glass-strong shadow-xl ring-2 ring-blue-500/15 absolute inset-0 transition-opacity duration-300 opacity-0 dark:group-hover:opacity-100 pointer-events-none dark:group-hover:pointer-events-auto">
               <AvatarImage src="/images/me formal black hover.png" alt={about.name} />
               <AvatarFallback className="text-2xl font-bold bg-gradient-to-br from-blue-500 to-cyan-500 text-white">GLR</AvatarFallback>
             </Avatar>

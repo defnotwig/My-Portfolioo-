@@ -25,9 +25,12 @@ export default function Header() {
       const currentScrollY = window.scrollY;
 
       if (currentScrollY > 50) {
+        // Scrolling down - hide but keep visible
         if (currentScrollY > lastScrollY.current && currentScrollY - lastScrollY.current > 5) {
           setIsVisible(false);
-        } else if (lastScrollY.current - currentScrollY > 5) {
+        }
+        // Scrolling up - show immediately
+        else if (currentScrollY < lastScrollY.current) {
           setIsVisible(true);
         }
       } else {
@@ -77,7 +80,7 @@ export default function Header() {
     <>
       <nav
         className={`fixed top-4 md:top-8 left-1/2 -translate-x-1/2 z-50 transition-all duration-500 ${
-          isVisible ? "translate-y-0 opacity-100" : "-translate-y-20 md:-translate-y-24 opacity-0"
+          isVisible ? "translate-y-0 opacity-100" : "-translate-y-[calc(100%-20px)] md:-translate-y-[calc(100%-24px)] opacity-70"
         } ${hasLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
         style={{
           transition: hasLoaded ? "all 0.5s ease-out" : "opacity 0.8s ease-out, transform 0.8s ease-out",
