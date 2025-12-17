@@ -35,6 +35,7 @@ const LocationPin = () => (
 export default function Hero({ about }) {
   const [achievementsOpen, setAchievementsOpen] = useState(false);
   const [theme, setTheme] = useState("light");
+  const [isHovering, setIsHovering] = useState(false);
 
   // Initialize theme on mount
   useEffect(() => {
@@ -78,26 +79,45 @@ export default function Hero({ about }) {
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.5 }}
-          className="flex justify-start mb-6 group"
+          className="flex justify-start mb-6"
         >
-          <div className="relative h-32 w-32">
-            {/* Light mode default */}
-            <Avatar className="h-32 w-32 border-4 border-white dark:border-gray-800 liquid-glass-strong shadow-xl ring-2 ring-blue-500/15 absolute inset-0 transition-opacity duration-300 group-hover:opacity-0 dark:opacity-0 dark:pointer-events-none">
+          <div 
+            className="relative h-32 w-32 cursor-pointer"
+            onMouseEnter={() => setIsHovering(true)}
+            onMouseLeave={() => setIsHovering(false)}
+          >
+            {/* Light mode - switches between profile.jpg and hover image */}
+            <Avatar 
+              className={`h-32 w-32 border-4 border-white dark:border-gray-800 liquid-glass-strong shadow-xl ring-2 ring-blue-500/15 absolute inset-0 transition-opacity duration-300 ${
+                theme === 'dark' ? 'opacity-0 pointer-events-none' : (isHovering ? 'opacity-0' : 'opacity-100')
+              }`}
+            >
               <AvatarImage src="/images/profile.jpg" alt={about.name} />
               <AvatarFallback className="text-2xl font-bold bg-gradient-to-br from-blue-500 to-cyan-500 text-white">GLR</AvatarFallback>
             </Avatar>
-            {/* Light mode hover */}
-            <Avatar className="h-32 w-32 border-4 border-white dark:border-gray-800 liquid-glass-strong shadow-xl ring-2 ring-blue-500/15 absolute inset-0 transition-opacity duration-300 opacity-0 group-hover:opacity-100 dark:opacity-0 dark:pointer-events-none pointer-events-none group-hover:pointer-events-auto">
+            <Avatar 
+              className={`h-32 w-32 border-4 border-white dark:border-gray-800 liquid-glass-strong shadow-xl ring-2 ring-blue-500/15 absolute inset-0 transition-opacity duration-300 ${
+                theme === 'dark' ? 'opacity-0 pointer-events-none' : (isHovering ? 'opacity-100' : 'opacity-0')
+              }`}
+            >
               <AvatarImage src="/images/me formal hover.png" alt={about.name} />
               <AvatarFallback className="text-2xl font-bold bg-gradient-to-br from-blue-500 to-cyan-500 text-white">GLR</AvatarFallback>
             </Avatar>
-            {/* Dark mode default */}
-            <Avatar className="h-32 w-32 border-4 border-white dark:border-gray-800 liquid-glass-strong shadow-xl ring-2 ring-blue-500/15 absolute inset-0 transition-opacity duration-300 opacity-0 dark:opacity-100 dark:group-hover:opacity-0 pointer-events-none dark:pointer-events-auto">
+            
+            {/* Dark mode - switches between black formal and black hover image */}
+            <Avatar 
+              className={`h-32 w-32 border-4 border-white dark:border-gray-800 liquid-glass-strong shadow-xl ring-2 ring-blue-500/15 absolute inset-0 transition-opacity duration-300 ${
+                theme === 'dark' ? (isHovering ? 'opacity-0' : 'opacity-100') : 'opacity-0 pointer-events-none'
+              }`}
+            >
               <AvatarImage src="/images/me formal black.png" alt={about.name} />
               <AvatarFallback className="text-2xl font-bold bg-gradient-to-br from-blue-500 to-cyan-500 text-white">GLR</AvatarFallback>
             </Avatar>
-            {/* Dark mode hover */}
-            <Avatar className="h-32 w-32 border-4 border-white dark:border-gray-800 liquid-glass-strong shadow-xl ring-2 ring-blue-500/15 absolute inset-0 transition-opacity duration-300 opacity-0 dark:group-hover:opacity-100 pointer-events-none dark:group-hover:pointer-events-auto">
+            <Avatar 
+              className={`h-32 w-32 border-4 border-white dark:border-gray-800 liquid-glass-strong shadow-xl ring-2 ring-blue-500/15 absolute inset-0 transition-opacity duration-300 ${
+                theme === 'dark' ? (isHovering ? 'opacity-100' : 'opacity-0') : 'opacity-0 pointer-events-none'
+              }`}
+            >
               <AvatarImage src="/images/me formal black hover.png" alt={about.name} />
               <AvatarFallback className="text-2xl font-bold bg-gradient-to-br from-blue-500 to-cyan-500 text-white">GLR</AvatarFallback>
             </Avatar>

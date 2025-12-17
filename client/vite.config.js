@@ -22,18 +22,12 @@ export default defineConfig({
     build: {
         // Enable source maps for debugging (disable in production)
         sourcemap: false,
-        // Minify for production
-        minify: 'terser',
-        terserOptions: {
-            compress: {
-                drop_console: true, // Remove console.logs in production
-                drop_debugger: true,
-            },
-        },
+        // Minify for production using esbuild (default, faster)
+        minify: 'esbuild',
         rollupOptions: {
             output: {
                 manualChunks: {
-                    'react-vendor': ['react', 'react-dom', 'react-router-dom'],
+                    'react-vendor': ['react', 'react-dom'],
                     'ui-vendor': ['framer-motion', 'lucide-react'],
                     'radix-vendor': [
                         '@radix-ui/react-dialog',

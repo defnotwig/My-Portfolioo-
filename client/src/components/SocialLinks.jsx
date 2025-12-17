@@ -43,9 +43,9 @@ export default function SocialLinks() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
-          className="liquid-glass-strong p-8 md:p-12"
+          className="liquid-glass-strong p-6 md:p-8"
         >
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-8">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4 md:gap-6">
             {socials.map((social, index) => {
               const Icon = social.icon;
               return (
@@ -58,14 +58,14 @@ export default function SocialLinks() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.3, delay: index * 0.1 }}
-                  whileHover={{ y: -8, scale: 1.05 }}
-                  className="flex flex-col items-center gap-4 p-8 cursor-pointer group"
+                  whileHover={{ y: -6, scale: 1.03 }}
+                  className="social-link-card flex flex-col items-center justify-center gap-4 p-6 md:p-8 cursor-pointer group rounded-2xl liquid-glass transition-all duration-300 hover:shadow-xl min-h-[140px] md:min-h-[160px]"
                   aria-label={social.label}
                 >
-                  <div className="rounded-full bg-gradient-to-br from-blue-500 to-cyan-500 p-5 shadow-lg group-hover:shadow-2xl transition-all duration-300">
-                    <Icon className="h-8 w-8 text-white" strokeWidth={2} />
+                  <div className="rounded-full bg-gradient-to-br from-blue-500 to-cyan-500 p-4 md:p-5 shadow-lg group-hover:shadow-2xl group-hover:scale-110 transition-all duration-300">
+                    <Icon className="h-7 w-7 md:h-8 md:w-8 text-white" strokeWidth={2} />
                   </div>
-                  <p className="text-sm font-medium text-foreground/90 dark:text-white/90 group-hover:text-blue-500 transition-colors">
+                  <p className="text-sm font-medium text-foreground/90 dark:text-white/90 group-hover:text-blue-500 dark:group-hover:text-blue-400 transition-colors">
                     {social.label}
                   </p>
                 </motion.a>

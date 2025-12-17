@@ -15,6 +15,7 @@ export default function Header() {
   const [hasLoaded, setHasLoaded] = useState(false);
   const lastScrollY = useRef(0);
   const ticking = useRef(false);
+  const scrollDelta = useRef(0);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -23,18 +24,26 @@ export default function Header() {
 
     const controlNavbar = () => {
       const currentScrollY = window.scrollY;
-
-      if (currentScrollY > 50) {
-        // Scrolling down - hide but keep visible
-        if (currentScrollY > lastScrollY.current && currentScrollY - lastScrollY.current > 5) {
+      const scrollDiff = currentScrollY - lastScrollY.current;
+      
+      // At the very top of the page - always show
+      if (currentScrollY <= 10) {
+        setIsVisible(true);
+        scrollDelta.current = 0;
+      } else {
+        // Accumulate scroll delta for smoother detection
+        scrollDelta.current += scrollDiff;
+        
+        // Scrolling down - hide after threshold
+        if (scrollDelta.current > 20) {
           setIsVisible(false);
+          scrollDelta.current = 0;
         }
         // Scrolling up - show immediately
-        else if (currentScrollY < lastScrollY.current) {
+        else if (scrollDelta.current < -5) {
           setIsVisible(true);
+          scrollDelta.current = 0;
         }
-      } else {
-        setIsVisible(true);
       }
 
       lastScrollY.current = currentScrollY;
@@ -79,11 +88,11 @@ export default function Header() {
   return (
     <>
       <nav
-        className={`fixed top-4 md:top-8 left-1/2 -translate-x-1/2 z-50 transition-all duration-500 ${
-          isVisible ? "translate-y-0 opacity-100" : "-translate-y-[calc(100%-20px)] md:-translate-y-[calc(100%-24px)] opacity-70"
-        } ${hasLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
+        className={`fixed top-4 md:top-8 left-1/2 -translate-x-1/2 z-50 transition-all duration-300 ${
+          isVisible ? "translate-y-0 opacity-100" : "-translate-y-[calc(100%-12px)] md:-translate-y-[calc(100%-16px)] opacity-60 hover:translate-y-0 hover:opacity-100"
+        } ${hasLoaded ? "" : "opacity-0 translate-y-4"}`}
         style={{
-          transition: hasLoaded ? "all 0.5s ease-out" : "opacity 0.8s ease-out, transform 0.8s ease-out",
+          transition: hasLoaded ? "transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease" : "opacity 0.8s ease-out, transform 0.8s ease-out",
         }}
       >
         {/* Main Navigation */}
