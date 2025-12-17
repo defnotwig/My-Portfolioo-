@@ -1,14 +1,17 @@
+import { lazy, Suspense } from "react";
 import Header from "@/components/Header";
 import Hero from "@/components/Hero";
 import About from "@/components/About";
-import TechStack from "@/components/TechStack";
-import Projects from "@/components/Projects";
-import Recommendations from "@/components/RecommendationsNew";
-import Certifications from "@/components/Certifications";
-import SocialLinks from "@/components/SocialLinks";
 import Footer from "@/components/Footer";
 import ChatWidget from "@/components/ChatWidget";
 import { usePortfolioData } from "@/hooks/usePortfolioData";
+
+// Lazy load below-the-fold components
+const TechStack = lazy(() => import("@/components/TechStack"));
+const Projects = lazy(() => import("@/components/Projects"));
+const Recommendations = lazy(() => import("@/components/RecommendationsNew"));
+const Certifications = lazy(() => import("@/components/Certifications"));
+const SocialLinks = lazy(() => import("@/components/SocialLinks"));
 
 export default function Home() {
   const {
@@ -58,11 +61,21 @@ export default function Home() {
         <main className="relative z-10 space-y-24 pb-24 pt-32">
           <Hero about={about} />
           <About about={about} experience={experience} />
-          <TechStack />
-          <Projects />
-          <Recommendations />
-          <Certifications />
-          <SocialLinks />
+          <Suspense fallback={<div className="section-container py-16"><div className="h-32 rounded-3xl liquid-glass animate-pulse" /></div>}>
+            <TechStack />
+          </Suspense>
+          <Suspense fallback={<div className="section-container py-16"><div className="h-32 rounded-3xl liquid-glass animate-pulse" /></div>}>
+            <Projects />
+          </Suspense>
+          <Suspense fallback={<div className="section-container py-16"><div className="h-32 rounded-3xl liquid-glass animate-pulse" /></div>}>
+            <Recommendations />
+          </Suspense>
+          <Suspense fallback={<div className="section-container py-16"><div className="h-32 rounded-3xl liquid-glass animate-pulse" /></div>}>
+            <Certifications />
+          </Suspense>
+          <Suspense fallback={<div className="section-container py-16"><div className="h-32 rounded-3xl liquid-glass animate-pulse" /></div>}>
+            <SocialLinks />
+          </Suspense>
         </main>
       )}
       

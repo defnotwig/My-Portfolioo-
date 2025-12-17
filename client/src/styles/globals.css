@@ -104,6 +104,9 @@
 html {
   scroll-behavior: smooth;
   scroll-padding-top: 120px;
+  /* GPU acceleration for animations */
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
 }
 
 body {
@@ -116,6 +119,10 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   transition: background-color 0.3s ease, color 0.3s ease;
+  /* Better rendering performance */
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 /* Fallback for browsers without backdrop-filter support */
@@ -179,6 +186,9 @@ body {
       inset 0 0.5px 0 0 var(--glass-highlight);
     transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
     color: var(--glass-text);
+    /* Performance optimizations */
+    will-change: transform, box-shadow;
+    transform: translateZ(0);
   }
 
   .liquid-glass-strong {

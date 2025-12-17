@@ -14,6 +14,7 @@ export default function Header() {
   const [isVisible, setIsVisible] = useState(true);
   const [hasLoaded, setHasLoaded] = useState(false);
   const lastScrollY = useRef(0);
+  const ticking = useRef(false);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -21,27 +22,33 @@ export default function Header() {
     }, 100);
 
     const controlNavbar = () => {
-      if (typeof window !== "undefined") {
-        const currentScrollY = window.scrollY;
+      const currentScrollY = window.scrollY;
 
-        if (currentScrollY > 50) {
-          if (currentScrollY > lastScrollY.current && currentScrollY - lastScrollY.current > 5) {
-            setIsVisible(false);
-          } else if (lastScrollY.current - currentScrollY > 5) {
-            setIsVisible(true);
-          }
-        } else {
+      if (currentScrollY > 50) {
+        if (currentScrollY > lastScrollY.current && currentScrollY - lastScrollY.current > 5) {
+          setIsVisible(false);
+        } else if (lastScrollY.current - currentScrollY > 5) {
           setIsVisible(true);
         }
+      } else {
+        setIsVisible(true);
+      }
 
-        lastScrollY.current = currentScrollY;
+      lastScrollY.current = currentScrollY;
+      ticking.current = false;
+    };
+
+    const requestTick = () => {
+      if (!ticking.current) {
+        requestAnimationFrame(controlNavbar);
+        ticking.current = true;
       }
     };
 
     if (typeof window !== "undefined") {
-      window.addEventListener("scroll", controlNavbar, { passive: true });
+      window.addEventListener("scroll", requestTick, { passive: true });
       return () => {
-        window.removeEventListener("scroll", controlNavbar);
+        window.removeEventListener("scroll", requestTick);
         clearTimeout(timer);
       };
     }

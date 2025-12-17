@@ -1,4 +1,6 @@
-export default function Footer() {
+import { memo } from "react";
+
+const Footer = memo(function Footer() {
   return (
     <footer className="relative mt-24 border-t border-border/50 liquid-glass">
       <div className="section-container flex flex-col gap-3 py-12 text-center">
@@ -6,5 +8,7 @@ export default function Footer() {
       </div>
     </footer>
   );
-}
+});
+
+export default Footer;
 

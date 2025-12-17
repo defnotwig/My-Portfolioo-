@@ -1,10 +1,11 @@
+import { memo } from "react";
 import { motion } from "framer-motion";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 
 const icons = ["🎓", "🧠", "⚙️", "🚀"];
 
-export default function About({ about, experience }) {
+const About = memo(function About({ about, experience }) {
   if (!about) return null;
 
   return (
@@ -68,7 +69,9 @@ export default function About({ about, experience }) {
       </div>
     </section>
   );
-}
+});
+
+export default About;
 
 
 // Remove the old Experience component structure below

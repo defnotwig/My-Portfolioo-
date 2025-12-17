@@ -14,6 +14,7 @@ import recommendationRoutes from "./routes/recommendationRoutes.js";
 import chatRoutes from "./routes/chatRoutes.js";
 import kbRoutes from "./routes/kbRoutes.js";
 import { errorHandler, notFound } from "./middleware/errorHandler.js";
+import { longCache } from "./middleware/cache.js";
 
 const app = express();
 
@@ -44,13 +45,14 @@ app.get("/api/health", (_req, res) => {
   res.json({ status: "ok" });
 });
 
-app.use("/api/about", aboutRoutes);
-app.use("/api/experience", experienceRoutes);
-app.use("/api/projects", projectRoutes);
-app.use("/api/certifications", certificationRoutes);
-app.use("/api/recommendations", recommendationRoutes);
-app.use("/api/chat", chatRoutes);
-app.use("/api/kb", kbRoutes);
+// Apply caching to static content routes
+app.use("/api/about", longCache, aboutRoutes);
+app.use("/api/experience", longCache, experienceRoutes);
+app.use("/api/projects", longCache, projectRoutes);
+app.use("/api/certifications", longCache, certificationRoutes);
+app.use("/api/recommendations", longCache, recommendationRoutes);
+app.use("/api/chat", chatRoutes); // No caching for chat
+app.use("/api/kb", longCache, kbRoutes);
 
 app.use(notFound);
 app.use(errorHandler);

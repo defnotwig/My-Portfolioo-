@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { motion } from "framer-motion";
 
 const projects = [
@@ -35,7 +36,7 @@ const cardVariants = {
   visible: { opacity: 1, y: 0 },
 };
 
-export default function Projects() {
+const Projects = memo(function Projects() {
   return (
     <section id="projects" className="section-container py-16">
       <div className="mx-auto max-w-4xl">
@@ -80,5 +81,7 @@ export default function Projects() {
       </div>
     </section>
   );
-}
+});
+
+export default Projects;
 
