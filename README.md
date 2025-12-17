@@ -1,6 +1,6 @@
 # Gabriel Ludwig Rivera — Portfolio
 
-Premium MERN-based personal website inspired by [bryllim.com](https://bryllim.com/) but uniquely branded for Gabriel Ludwig Rivera. Light-only theme, glassmorphism, shadcn/ui components, smooth animations, and a mock AI concierge chat widget.
+Premium MERN-based personal website for myself. Light-only theme, glassmorphism, shadcn/ui components, smooth animations, and a mock AI concierge chat widget.
 
 ## Tech Stack
 - **Frontend:** React + Vite, Tailwind CSS, shadcn/ui, Framer Motion, Axios
@@ -57,5 +57,5 @@ cd server && npm run start        # ensures Express uses compiled assets if depl
 - SEO meta tags + OG preview (`client/public/og-image.svg`)
 
 ## Credits
-Design direction inspired by [bryllim.com](https://bryllim.com/). All content tailored for Gabriel Ludwig Rivera.
+Design direction and all content tailored for Gabriel Ludwig Rivera.
 
