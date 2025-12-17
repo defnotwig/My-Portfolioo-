@@ -52,17 +52,17 @@ export default function ChatWidget() {
     <div className="fixed bottom-6 right-6 z-50">
       <Sheet open={open} onOpenChange={setOpen}>
         <SheetTrigger asChild>
-          <Button size="lg" className="bg-foreground dark:bg-white/10 dark:border dark:border-white/20 text-background dark:text-white rounded-full px-6 py-6 shadow-2xl hover:shadow-3xl transition-all hover:scale-110 animate-pulse-glow font-medium backdrop-blur-md hover:bg-foreground/80 hover:text-background dark:hover:bg-white/25 dark:hover:text-white">
+          <Button size="lg" className="bg-foreground dark:bg-white hover:bg-foreground/90 dark:hover:bg-gray-50 text-background dark:text-black rounded-full px-6 py-6 shadow-2xl hover:shadow-3xl transition-all hover:scale-110 animate-pulse-glow font-medium">
             <MessageCircle className="mr-2 h-5 w-5" />
             Chat with Gabriel
           </Button>
         </SheetTrigger>
         <SheetContent
-          className="flex h-[80vh] max-h-[600px] w-full flex-col gap-0 p-0 sm:max-w-md liquid-glass-strong"
+          className="flex h-[80vh] max-h-[600px] w-full flex-col gap-0 p-0 sm:max-w-md bg-white/10 dark:bg-white/5 backdrop-blur-md border border-white/20 dark:border-white/10 rounded-2xl shadow-lg dark:shadow-2xl"
           title="Chat with Gabriel"
           description="Ask me about anything!"
         >
-          <div className="flex items-center gap-3 border-b border-border/50 liquid-glass px-6 py-5">
+          <div className="flex items-center gap-3 border-b border-white/20 dark:border-white/10 bg-white/5 dark:bg-white/3 backdrop-blur-sm px-6 py-5">
             <Avatar className="h-11 w-11 liquid-glass-strong border-2 border-blue-500/30 shadow-lg ring-2 ring-blue-500/20">
               <AvatarImage src="/images/profile.jpg" alt="Gabriel Ludwig Rivera" />
               <AvatarFallback className="bg-gradient-to-br from-blue-500 to-cyan-500 text-white font-bold">GLR</AvatarFallback>
@@ -83,7 +83,7 @@ export default function ChatWidget() {
               >
                 <div
                   className={`max-w-[85%] rounded-2xl px-4 py-3 text-sm shadow-md ${msg.sender === "assistant"
-                    ? "liquid-glass-strong border border-white/20 dark:border-white/10 text-foreground/90 dark:text-white/95"
+                    ? "bg-white/10 dark:bg-white/5 backdrop-blur-md border border-white/20 dark:border-white/10 text-foreground/90 dark:text-white/95"
                     : "bg-gradient-to-r from-blue-500 to-cyan-500 text-white font-medium"
                     }`}
                 >
@@ -93,7 +93,7 @@ export default function ChatWidget() {
             ))}
             {loading && (
               <div className="flex justify-start">
-                <div className="max-w-[85%] rounded-2xl px-4 py-3 text-sm liquid-glass-strong border border-white/20 dark:border-white/10 flex items-center gap-2">
+                <div className="max-w-[85%] rounded-2xl px-4 py-3 text-sm bg-white/10 dark:bg-white/5 backdrop-blur-md border border-white/20 dark:border-white/10 flex items-center gap-2">
                   <Loader2 className="h-4 w-4 animate-spin text-blue-500" />
                   <span className="text-foreground/90 dark:text-white/95">Thinking...</span>
                 </div>
@@ -102,13 +102,13 @@ export default function ChatWidget() {
           </div>
           <form
             onSubmit={sendMessage}
-            className="flex gap-3 border-t border-border/50 liquid-glass px-4 py-4"
+            className="flex gap-3 border-t border-white/20 dark:border-white/10 bg-white/5 dark:bg-white/3 backdrop-blur-sm px-4 py-4"
           >
             <Input
               placeholder="Ask me about anything!"
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              className="rounded-full liquid-glass px-5 py-6 text-sm text-foreground placeholder:text-muted-foreground focus:ring-2 focus:ring-blue-500 transition-all"
+              className="rounded-full bg-white/10 dark:bg-white/5 backdrop-blur-md border border-white/20 dark:border-white/10 px-5 py-6 text-sm text-foreground placeholder:text-muted-foreground focus:ring-2 focus:ring-blue-500 transition-all"
               maxLength={1000}
             />
             <Button type="submit" disabled={loading} className="bg-foreground dark:bg-white/90 text-background dark:text-gray-900 rounded-full px-6 shadow-lg hover:shadow-xl transition-all hover:scale-105 font-medium hover:bg-foreground/80 hover:text-background dark:hover:bg-white dark:hover:text-gray-900">

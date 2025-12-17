@@ -18,7 +18,7 @@ export default function About({ about, experience }) {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
-            className="liquid-glass-strong p-8 md:p-10 space-y-5"
+            className="bg-white/10 dark:bg-white/5 backdrop-blur-md border border-white/20 dark:border-white/10 rounded-3xl p-8 md:p-10 space-y-5 shadow-lg dark:shadow-2xl"
           >
             {about.paragraphs?.map((paragraph, index) => (
               <p key={index} className="text-base leading-relaxed text-foreground/90 dark:text-white/90">

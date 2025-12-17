@@ -103,7 +103,7 @@ export default function Hero({ about }) {
             aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
           >
             {theme === "dark" ? (
-              <Sun className="h-5 w-5 text-yellow-400" />
+              <Sun className="h-5 w-5 text-white" />
             ) : (
               <Moon className="h-5 w-5 text-slate-600" />
             )}
@@ -134,9 +134,9 @@ export default function Hero({ about }) {
           <div className="relative">
             <button
               onClick={() => setAchievementsOpen(!achievementsOpen)}
-              className="flex items-center gap-2 px-4 py-2.5 liquid-glass-btn text-sm hover:scale-[1.02] transition-all"
+              className="flex items-center gap-2 px-4 py-2.5 liquid-glass-btn text-sm hover:scale-[1.02] transition-all border border-white/20 dark:border-white/10"
             >
-              <span className="text-foreground font-medium">Achievements</span>
+              <span className="text-foreground font-medium">{achievements[0]}</span>
               <ChevronDown className={`h-4 w-4 text-muted-foreground transition-transform duration-200 ${achievementsOpen ? 'rotate-180' : ''}`} />
             </button>
             {achievementsOpen && (
@@ -167,7 +167,7 @@ export default function Hero({ about }) {
           className="flex flex-wrap gap-3"
         >
           <Button
-            className="bg-foreground dark:bg-white/10 dark:border dark:border-white/20 text-background dark:text-white rounded-full px-5 py-2.5 hover:scale-105 hover:bg-foreground/80 hover:text-background dark:hover:bg-white/25 dark:hover:text-white transition-all font-medium backdrop-blur-md"
+            className="bg-foreground dark:bg-white hover:bg-foreground/90 dark:hover:bg-gray-50 text-background dark:text-black rounded-full px-5 py-2.5 hover:scale-105 transition-all font-medium"
             asChild
           >
             <a href="mailto:ludwigrivera13@gmail.com">
@@ -177,7 +177,7 @@ export default function Hero({ about }) {
           </Button>
           <Button
             variant="outline"
-            className="bg-white/10 dark:bg-white/5 border border-white/20 dark:border-white/10 text-foreground dark:text-white rounded-full px-5 py-2.5 hover:scale-105 hover:bg-white/20 dark:hover:bg-white/10 transition-all font-medium backdrop-blur-md"
+            className="liquid-glass-btn border border-white/20 dark:border-white/10 text-foreground dark:text-white rounded-full px-5 py-2.5 hover:scale-105 transition-all font-medium"
             asChild
           >
             <a href="https://www.linkedin.com/in/glrrivera/" target="_blank" rel="noopener noreferrer">
@@ -187,7 +187,7 @@ export default function Hero({ about }) {
           </Button>
           <Button
             variant="outline"
-            className="bg-white/10 dark:bg-white/5 border border-white/20 dark:border-white/10 text-foreground dark:text-white rounded-full px-5 py-2.5 hover:scale-105 hover:bg-white/20 dark:hover:bg-white/10 transition-all font-medium backdrop-blur-md"
+            className="liquid-glass-btn border border-white/20 dark:border-white/10 text-foreground dark:text-white rounded-full px-5 py-2.5 hover:scale-105 transition-all font-medium"
             asChild
           >
             <a href="https://github.com/defnotwig" target="_blank" rel="noopener noreferrer">
@@ -197,7 +197,7 @@ export default function Hero({ about }) {
           </Button>
           <Button
             variant="outline"
-            className="bg-white/10 dark:bg-white/5 border border-white/20 dark:border-white/10 text-foreground dark:text-white rounded-full px-5 py-2.5 hover:scale-105 hover:bg-white/20 dark:hover:bg-white/10 transition-all font-medium backdrop-blur-md"
+            className="liquid-glass-btn border border-white/20 dark:border-white/10 text-foreground dark:text-white rounded-full px-5 py-2.5 hover:scale-105 transition-all font-medium"
             asChild
           >
             <a href="/CV_Rivera_Gabriel_Ludwig_R..pdf" download>
