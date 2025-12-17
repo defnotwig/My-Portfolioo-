@@ -73,17 +73,35 @@ export default function Hero({ about }) {
   return (
     <section className="section-container py-12" id="hero">
       <div className="mx-auto max-w-3xl">
-        {/* Profile Picture */}
+        {/* Profile Picture with hover effects */}
         <motion.div
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.5 }}
-          className="flex justify-start mb-6"
+          className="flex justify-start mb-6 group"
         >
-          <Avatar className="h-32 w-32 border-4 border-white dark:border-gray-800 liquid-glass-strong shadow-xl ring-2 ring-blue-500/15">
-            <AvatarImage src="/images/profile.jpg" alt={about.name} />
-            <AvatarFallback className="text-2xl font-bold bg-gradient-to-br from-blue-500 to-cyan-500 text-white">GLR</AvatarFallback>
-          </Avatar>
+          <div className="relative h-32 w-32">
+            {/* Light mode default */}
+            <Avatar className="h-32 w-32 border-4 border-white dark:border-gray-800 liquid-glass-strong shadow-xl ring-2 ring-blue-500/15 absolute inset-0 transition-opacity duration-300 group-hover:opacity-0 dark:opacity-0">
+              <AvatarImage src="/images/profile.jpg" alt={about.name} />
+              <AvatarFallback className="text-2xl font-bold bg-gradient-to-br from-blue-500 to-cyan-500 text-white">GLR</AvatarFallback>
+            </Avatar>
+            {/* Light mode hover */}
+            <Avatar className="h-32 w-32 border-4 border-white dark:border-gray-800 liquid-glass-strong shadow-xl ring-2 ring-blue-500/15 absolute inset-0 transition-opacity duration-300 opacity-0 group-hover:opacity-100 dark:opacity-0 dark:group-hover:opacity-0">
+              <AvatarImage src="/images/me formal hover.png" alt={about.name} />
+              <AvatarFallback className="text-2xl font-bold bg-gradient-to-br from-blue-500 to-cyan-500 text-white">GLR</AvatarFallback>
+            </Avatar>
+            {/* Dark mode default */}
+            <Avatar className="h-32 w-32 border-4 border-white dark:border-gray-800 liquid-glass-strong shadow-xl ring-2 ring-blue-500/15 absolute inset-0 transition-opacity duration-300 opacity-0 dark:opacity-100 dark:group-hover:opacity-0">
+              <AvatarImage src="/images/me formal black.png" alt={about.name} />
+              <AvatarFallback className="text-2xl font-bold bg-gradient-to-br from-blue-500 to-cyan-500 text-white">GLR</AvatarFallback>
+            </Avatar>
+            {/* Dark mode hover */}
+            <Avatar className="h-32 w-32 border-4 border-white dark:border-gray-800 liquid-glass-strong shadow-xl ring-2 ring-blue-500/15 absolute inset-0 transition-opacity duration-300 opacity-0 dark:group-hover:opacity-100">
+              <AvatarImage src="/images/me formal black hover.png" alt={about.name} />
+              <AvatarFallback className="text-2xl font-bold bg-gradient-to-br from-blue-500 to-cyan-500 text-white">GLR</AvatarFallback>
+            </Avatar>
+          </div>
         </motion.div>
 
         {/* Name and Verified Badge + Theme Toggle */}

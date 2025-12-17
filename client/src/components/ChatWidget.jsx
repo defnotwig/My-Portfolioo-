@@ -58,9 +58,10 @@ export default function ChatWidget() {
           </Button>
         </SheetTrigger>
         <SheetContent
-          className="flex h-[80vh] max-h-[600px] w-full flex-col gap-0 p-0 sm:max-w-md bg-white/10 dark:bg-white/5 backdrop-blur-md border border-white/20 dark:border-white/10 rounded-2xl shadow-lg dark:shadow-2xl"
+          className="flex h-[75vh] max-h-[500px] w-full flex-col gap-0 p-0 sm:max-w-sm bg-white/10 dark:bg-white/5 backdrop-blur-md border border-white/20 dark:border-white/10 rounded-2xl shadow-lg dark:shadow-2xl"
           title="Chat with Gabriel"
           description="Ask me about anything!"
+          side="right"
         >
           <div className="flex items-center gap-3 border-b border-white/20 dark:border-white/10 bg-white/5 dark:bg-white/3 backdrop-blur-sm px-6 py-5">
             <Avatar className="h-11 w-11 liquid-glass-strong border-2 border-blue-500/30 shadow-lg ring-2 ring-blue-500/20">

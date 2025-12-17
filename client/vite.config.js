@@ -12,5 +12,19 @@ export default defineConfig({
     server: {
         port: 3501,
     },
+    build: {
+        rollupOptions: {
+            output: {
+                manualChunks: {
+                    'react-vendor': ['react', 'react-dom', 'react-router-dom'],
+                    'ui-vendor': ['framer-motion', 'lucide-react'],
+                },
+            },
+        },
+        chunkSizeWarningLimit: 1000,
+    },
+    optimizeDeps: {
+        include: ['react', 'react-dom', 'framer-motion', 'lucide-react'],
+    },
 });
 
