@@ -31,7 +31,7 @@ const cardVariants = {
 export default function Certifications() {
   return (
     <section id="certifications" className="section-container py-16">
-      <div className="mx-auto max-w-4xl">
+      <div className="mx-auto max-w-3xl">
         <h2 className="text-2xl font-bold mb-8 text-foreground">Certifications</h2>
 
         <motion.div
