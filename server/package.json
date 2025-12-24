@@ -7,7 +7,8 @@
   "scripts": {
     "dev": "nodemon src/index.js",
     "start": "node src/index.js",
-    "lint": "echo \"No backend linter configured\""
+    "lint": "echo \"No backend linter configured\"",
+    "seed": "node src/scripts/runSeed.js"
   },
   "keywords": [
     "express",
