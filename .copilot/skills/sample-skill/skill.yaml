@@ -1,0 +1,17 @@
+name: sample-skill
+version: "0.1.0"
+description: "Minimal Copilot Agent Skill to list workspace files for testing"
+author: "You"
+manifest_version: 1
+
+triggers:
+  - type: "command"
+    command: "sample.list-files"
+    description: "List files in the workspace root"
+
+permissions:
+  - filesystem: ["./"]
+
+handler:
+  type: "local"
+  command: "node ./sample-skill.js"
