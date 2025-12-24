@@ -11,11 +11,8 @@ const aboutData = {
     tagline:
         "Designing resilient systems with Gen-Z polish, AI-first workflows, and production discipline.",
     paragraphs: [
-        "I'm a fourth-year BS Information Technology student at the City College of Calamba (2022–Present), building a foundation across web development, database management, and software engineering while shipping real systems for students and organizations.",
-        "As Membership and Election Committee Head of the CCC Information Technology Society, I help represent 1,469 BSIT and 509 BSCS students, implementing barcode-based attendance and automated event evaluation flows that cut manual processing time by roughly 70% and drastically improve reporting accuracy.",
-        "Previously, I worked in Quality Assurance for Shopee Philippines (Failed Deliveries), where I led end-to-end QA for return logistics and 3PL partners—enforcing strict verification standards, running high-accuracy barcode and item audits, validating parcel integrity, and supporting interdepartmental accountability with clear reporting.",
-        "I build systems like the K-WISE PC builder kiosk and QR Attendance Tracker with a focus on determinism, observability, and performance—blending rule engines, databases, and modern UIs so experiences feel both premium and dependable.",
-        "Lately, I've been leaning deeper into AI-assisted development, using tools like Ollama DeepSeek R1 and LLM workflows to optimize engineering processes, recommendation engines, and developer productivity.",
+        "I am a full-stack software developer and BS Information Technology student with a strong foundation in web development, database management, and software engineering. My work focuses on designing and building reliable, high-performance systems using modern technologies across the frontend and backend. I have delivered end-to-end solutions such as the K-WISE PC Builder Kiosk and Attendance and Payroll Management System, applying structured system architecture, relational database design, and scalable API development to real operational environments.",
+        "In addition to development, I bring experience in quality assurance and process validation from my work with Shopee Philippines, where I supported logistics and third-party operations through strict verification standards, barcode audits, and structured reporting. I also hold a leadership role in the City College of Calamba Information Technology Society, contributing to system-driven improvements for large student populations. Recently, I have been expanding into AI and machine-learning–assisted development, integrating LLM workflows to enhance recommendation systems, optimize engineering processes, and improve overall software delivery. I am continuously refining my skills to build dependable, production-ready systems that deliver measurable impact."
     ],
     highlights: [
         "BS Information Technology, City College of Calamba (2022–Present)",
@@ -156,6 +153,18 @@ const recommendationData = [
             "Gabriel is dependable and quick to respond. When we need dashboards or automations updated, he gets them done without fuss.",
         author: "Arlou Fernando",
         role: "Dean, DCI, City College of Calamba",
+    },
+    {
+        quote:
+            "Gabriel is dependable and quick to respond. When we need dashboards or automations updated, he gets them done without fuss.",
+        author: "Kent Cyrem Patasin",
+        role: "Colleague, BSIT, City College of Calamba",
+    },
+    {
+        quote:
+            "Gabriel is dependable and quick to respond. When we need dashboards or automations updated, he gets them done without fuss.",
+        author: "Jake Mesina",
+        role: "Colleague, BSIT, City College of Calamba",
     },
 ];
 
