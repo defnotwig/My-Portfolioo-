@@ -1,4 +1,4 @@
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, useEffect } from "react";
 import Header from "@/components/Header";
 import Hero from "@/components/Hero";
 import About from "@/components/About";
@@ -24,6 +24,27 @@ export default function Home() {
     error,
   } = usePortfolioData();
 
+  // Auto-hide scrollbar when not scrolling
+  useEffect(() => {
+    let scrollTimeout;
+    
+    const handleScroll = () => {
+      document.documentElement.classList.add('is-scrolling');
+      
+      clearTimeout(scrollTimeout);
+      scrollTimeout = setTimeout(() => {
+        document.documentElement.classList.remove('is-scrolling');
+      }, 1000); // Hide scrollbar 1 second after scrolling stops
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      clearTimeout(scrollTimeout);
+    };
+  }, []);
+
   return (
     <div className="relative min-h-screen overflow-x-hidden bg-background transition-colors duration-500">
       {/* Apple-Inspired Liquid Glass Background */}
@@ -31,7 +52,20 @@ export default function Home() {
       {/* Dark Mode: Deep black with subtle blue accents */}
       <div className="pointer-events-none fixed inset-0 bg-[#FAF9F6] dark:bg-[#0a0a0a]" />
       <div className="pointer-events-none fixed inset-0 bg-[radial-gradient(ellipse_at_top_right,_rgba(59,130,246,0.06),_transparent_50%),radial-gradient(ellipse_at_bottom_left,_rgba(6,182,212,0.04),_transparent_50%)] dark:bg-[radial-gradient(ellipse_at_top_right,_rgba(59,130,246,0.08),_transparent_40%),radial-gradient(ellipse_at_bottom_left,_rgba(6,182,212,0.06),_transparent_50%)]" />
-      <div className="pointer-events-none fixed inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAiIGhlaWdodD0iODAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI4MCIgaGVpZ2h0PSI4MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAxMCAwIEwgMCAwIDAgMTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzAwMCIgc3Ryb2tlLW9wYWNpdHk9IjAuMDIiIHN0cm9rZS13aWR0aD0iMSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmlkKSIvPjwvc3ZnPg==')] opacity-40 dark:opacity-10" />
+      
+      {/* Grid Background Pattern - Applied to Entire Page */}
+      <div className="pointer-events-none fixed inset-0 opacity-[0.03] dark:opacity-[0.05]">
+        <div
+          className="h-full w-full"
+          style={{
+            backgroundImage: `
+              linear-gradient(currentColor 1px, transparent 1px),
+              linear-gradient(90deg, currentColor 1px, transparent 1px)
+            `,
+            backgroundSize: "60px 60px",
+          }}
+        />
+      </div>
       
       <Header />
       
