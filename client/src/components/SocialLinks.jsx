@@ -20,12 +20,12 @@ const socials = [
   },
   {
     label: "Email",
-    href: "https://mail.google.com/mail/?view=cm&fs=1&to=ludwigrivera13@gmail.com",
+    href: "mailto:ludwigrivera13@gmail.com",
     icon: Mail,
   },
   {
     label: "Phone",
-    href: "tel:09942372275",
+    href: "tel:+639942372275",
     icon: Phone,
   },
 ];
@@ -34,7 +34,7 @@ const socials = [
 export default function SocialLinks() {
   return (
     <section id="contact" className="section-container py-20">
-      <div className="mx-auto max-w-6xl">
+      <div className="mx-auto max-w-3xl">
         <h2 className="text-2xl font-bold mb-8 text-foreground">Connect</h2>
 
         {/* Single Glassmorphism Container */}
