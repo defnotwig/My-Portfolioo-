@@ -1,5 +1,5 @@
-import { motion } from "framer-motion";
-import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { useState, useEffect, useCallback } from "react";
 import { Mail, Linkedin, Github, ChevronDown, Moon, Sun } from "lucide-react";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -32,10 +32,144 @@ const LocationPin = () => (
   </span>
 );
 
+// Achievement Popup with Carousel and Liquid Glass Effect - Full-size images
+// Renders as a fixed modal-like popup to ensure visibility
+const AchievementPopup = ({ achievement, carouselIndex, setCarouselIndex }) => {
+  const [localIndex, setLocalIndex] = useState(carouselIndex);
+  const [imageOrientation, setImageOrientation] = useState('landscape'); // 'landscape' or 'portrait'
+  const [imageLoaded, setImageLoaded] = useState(false);
+  const [imageFailed, setImageFailed] = useState(false);
+  
+  // Auto-advance carousel every 5 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setLocalIndex(prev => (prev + 1) % achievement.images.length);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, [achievement.images.length]);
+
+  // Sync with parent
+  useEffect(() => {
+    setCarouselIndex(localIndex);
+  }, [localIndex, setCarouselIndex]);
+
+  // Reset image state when index changes
+  useEffect(() => {
+    setImageLoaded(false);
+    setImageFailed(false);
+  }, [localIndex]);
+
+  // Detect image orientation on load
+  const handleImageLoad = (e) => {
+    const img = e.target;
+    setImageLoaded(true);
+    if (img.naturalWidth > img.naturalHeight) {
+      setImageOrientation('landscape');
+    } else {
+      setImageOrientation('portrait');
+    }
+  };
+
+  const handleImageError = (e) => {
+    setImageFailed(true);
+    // Use profile.jpg as fallback since placeholder doesn't exist
+    e.target.src = '/images/profile.jpg';
+  };
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, x: 20, scale: 0.95 }}
+      animate={{ opacity: 1, x: 0, scale: 1 }}
+      exit={{ opacity: 0, x: 20, scale: 0.95 }}
+      transition={{ duration: 0.25, ease: "easeOut" }}
+      className="absolute left-full ml-4 top-0 rounded-2xl overflow-hidden z-[100] shadow-2xl"
+      style={{
+        width: imageOrientation === 'portrait' ? 'min(280px, 35vw)' : 'min(400px, 40vw)',
+        maxHeight: '70vh',
+      }}
+      onClick={e => e.stopPropagation()}
+    >
+      {/* Carousel with Liquid Glass Effect on image area only */}
+      <div 
+        className="relative overflow-hidden"
+        style={{
+          // Dynamic sizing: landscape = wider, portrait = taller - NO extra padding
+          aspectRatio: imageOrientation === 'portrait' ? '9/16' : '16/9',
+          maxHeight: imageOrientation === 'portrait' ? '55vh' : '35vh',
+          background: 'linear-gradient(135deg, rgba(30,30,30,0.95) 0%, rgba(20,20,20,0.98) 100%)',
+          backdropFilter: 'blur(40px) saturate(200%)',
+          WebkitBackdropFilter: 'blur(40px) saturate(200%)',
+        }}
+      >
+        {/* Liquid glass refraction overlay on image area - Apple style */}
+        <div 
+          className="absolute inset-0 pointer-events-none z-10"
+          style={{
+            background: 'linear-gradient(135deg, rgba(255,182,193,0.08) 0%, rgba(173,216,230,0.08) 25%, rgba(255,218,185,0.08) 50%, rgba(221,160,221,0.08) 75%, rgba(152,251,152,0.08) 100%)',
+            boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.5), inset 0 -1px 0 rgba(0,0,0,0.05)',
+          }}
+        />
+        
+        {/* Loading placeholder */}
+        {!imageLoaded && !imageFailed && (
+          <div className="absolute inset-0 flex items-center justify-center bg-gray-100 dark:bg-gray-800">
+            <div className="animate-pulse text-gray-400">Loading...</div>
+          </div>
+        )}
+        
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={localIndex}
+            initial={{ opacity: 0, x: 50 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -50 }}
+            transition={{ duration: 0.3 }}
+            className="absolute inset-0 flex items-center justify-center"
+          >
+            <img 
+              src={achievement.images[localIndex]} 
+              alt={`${achievement.title} - Image ${localIndex + 1}`}
+              className="w-full h-full object-cover"
+              onLoad={handleImageLoad}
+              onError={handleImageError}
+            />
+          </motion.div>
+        </AnimatePresence>
+        
+        {/* Carousel Indicators - Centered at bottom of image */}
+        <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-2 z-20">
+          {achievement.images.map((_, idx) => (
+            <button 
+              key={idx}
+              onClick={(e) => {
+                e.stopPropagation();
+                setLocalIndex(idx);
+              }}
+              className={`h-2 rounded-full transition-all duration-300 cursor-pointer hover:opacity-80 ${
+                idx === localIndex ? 'bg-white w-6 shadow-lg' : 'bg-white/50 w-2 hover:bg-white/70'
+              }`}
+              aria-label={`Go to image ${idx + 1}`}
+            />
+          ))}
+        </div>
+      </div>
+      
+      {/* Description - Solid background for readability */}
+      <div className="p-4 bg-white dark:bg-gray-900 border-t border-gray-200/50 dark:border-gray-700/50">
+        <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
+          {achievement.description}
+        </p>
+      </div>
+    </motion.div>
+  );
+};
+
 export default function Hero({ about }) {
   const [achievementsOpen, setAchievementsOpen] = useState(false);
   const [theme, setTheme] = useState("light");
   const [isHovering, setIsHovering] = useState(false);
+  const [hoveredAchievement, setHoveredAchievement] = useState(null);
+  const [carouselIndex, setCarouselIndex] = useState(0);
 
   // Initialize theme on mount
   useEffect(() => {
@@ -63,13 +197,36 @@ export default function Hero({ about }) {
 
   if (!about) return null;
 
-  const achievements = [
-    "Ship or Be Shipped 2025 Hackathon Participant",
-    "Techno Expo Excellence in Innovation Award",
-    "Best in Capstone Project Award 2025",
-    "Top 1 Performing Student 3rd Year 2025",
-    "Top 4 Performing Student 2nd Year 2024"
+  // Achievement data with images and descriptions
+  const achievementsData = [
+    {
+      title: "Ship or Be Shipped 2025 Hackathon Participant",
+      description: "Participated in the intensive Ship or Be Shipped 2025 Hackathon, developing innovative solutions under time pressure and collaborating with developers worldwide.",
+      images: ["/images/achievements/hackathon-1.jpg", "/images/achievements/hackathon-2.jpg", "/images/achievements/hackathon-3.jpg"]
+    },
+    {
+      title: "Techno Expo Excellence in Innovation Award",
+      description: "Recognized for outstanding innovation at the Techno Expo, showcasing cutting-edge technology solutions and creative problem-solving approaches.",
+      images: ["/images/achievements/techno-expo-1.jpg", "/images/achievements/techno-expo-2.jpg", "/images/achievements/techno-expo-3.jpg"]
+    },
+    {
+      title: "Best in Capstone Project Award 2025",
+      description: "Awarded Best in Capstone Project for the K-WISE PC Builder Kiosk, demonstrating excellence in system design, AI integration, and practical implementation.",
+      images: ["/images/achievements/capstone-1.jpg", "/images/achievements/capstone-2.png", "/images/achievements/capstone-3.jpg"]
+    },
+    {
+      title: "Top 1 Performing Student 3rd Year 2025",
+      description: "Achieved the highest academic standing among 3rd year IT students, maintaining excellence in both theoretical knowledge and practical skills.",
+      images: ["/images/achievements/top1-3rd-1.jpg", "/images/achievements/top1-3rd-2.jpg", "/images/achievements/top1-3rd-3.jpg"]
+    },
+    {
+      title: "Top 4 Performing Student 2nd Year 2024",
+      description: "Ranked among the top 4 performing students in the 2nd year cohort, demonstrating consistent academic excellence and leadership.",
+      images: ["/images/achievements/top4-2nd-1.png", "/images/achievements/top4-2nd-2.jpg", "/images/achievements/top4-2nd-3.jpg"]
+    }
   ];
+
+  const achievements = achievementsData.map(a => a.title);
 
   return (
     <section className="section-container py-12" id="hero">
@@ -185,10 +342,29 @@ export default function Hero({ about }) {
               >
                 <h3 className="font-semibold mb-3 text-foreground text-sm">Achievements & Awards</h3>
                 <ul className="space-y-2.5">
-                  {achievements.map((achievement, idx) => (
-                    <li key={idx} className="text-sm flex items-start gap-2.5 text-foreground">
-                      <span className="text-blue-500 mt-0.5 flex-shrink-0">•</span>
-                      <span>{achievement}</span>
+                  {achievementsData.map((achievement, idx) => (
+                    <li 
+                      key={idx} 
+                      className="text-sm flex items-start gap-2.5 text-foreground cursor-pointer hover:bg-blue-50/50 dark:hover:bg-white/10 rounded-lg px-2 py-2 transition-all duration-200 relative group"
+                      onMouseEnter={() => {
+                        setHoveredAchievement(idx);
+                        setCarouselIndex(0);
+                      }}
+                      onMouseLeave={() => setHoveredAchievement(null)}
+                    >
+                      <span className="text-blue-500 mt-0.5 flex-shrink-0 transition-transform duration-200 group-hover:scale-125">•</span>
+                      <span className="group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-200">{achievement.title}</span>
+                      
+                      {/* Liquid Glass Popup on Left - Aligned with the dot */}
+                      <AnimatePresence>
+                        {hoveredAchievement === idx && (
+                          <AchievementPopup 
+                            achievement={achievement}
+                            carouselIndex={carouselIndex}
+                            setCarouselIndex={setCarouselIndex}
+                          />
+                        )}
+                      </AnimatePresence>
                     </li>
                   ))}
                 </ul>
