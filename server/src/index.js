@@ -15,6 +15,7 @@ import chatRoutes from "./routes/chatRoutes.js";
 import kbRoutes from "./routes/kbRoutes.js";
 import { errorHandler, notFound } from "./middleware/errorHandler.js";
 import { longCache } from "./middleware/cache.js";
+import serverless from "serverless-http";
 
 const app = express();
 
@@ -79,16 +80,26 @@ app.use("/api/kb", longCache, kbRoutes);
 app.use(notFound);
 app.use(errorHandler);
 
-const PORT = process.env.PORT || 5501;
+let dbConnected = false;
+const handler = serverless(app);
 
-const bootstrap = async () => {
-  await connectDB();
-  await seedContent();
+async function ensureDbConnected() {
+  if (!dbConnected) {
+    await connectDB();
+    dbConnected = true;
+    // Run seed only when explicitly requested (avoid destructive ops on cold starts)
+    if (process.env.SEED_ON_BOOT === "true") {
+      try {
+        await seedContent();
+      } catch (err) {
+        console.error("Seed error:", err);
+      }
+    }
+  }
+}
 
-  app.listen(PORT, () => {
-    console.log(`🚀 API ready on http://localhost:${PORT}`);
-  });
-};
-
-bootstrap();
+export default async function (req, res) {
+  await ensureDbConnected();
+  return handler(req, res);
+}
 
