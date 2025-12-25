@@ -64,20 +64,6 @@ app.use(express.urlencoded({ extended: false }));
 app.use(helmet());
 app.use(morgan(process.env.NODE_ENV === "production" ? "combined" : "dev"));
 
-// Ensure database connection before handling any request
-app.use(async (req, res, next) => {
-  try {
-    await connectDB();
-    next();
-  } catch (error) {
-    console.error("❌ Database connection failed:", error);
-    res.status(500).json({ 
-      error: "Database connection failed",
-      message: process.env.NODE_ENV === "production" ? "Internal server error" : error.message 
-    });
-  }
-});
-
 app.get("/api/health", (_req, res) => {
   res.json({ status: "ok" });
 });
@@ -105,6 +91,21 @@ if (process.env.NODE_ENV !== "production") {
   });
 }
 
-// For Vercel serverless
-export default serverless(app);
+// For Vercel serverless - connect DB once on cold start
+let isConnected = false;
+
+const handler = serverless(app);
+
+export default async (req, res) => {
+  if (!isConnected) {
+    try {
+      await connectDB();
+      isConnected = true;
+    } catch (error) {
+      console.error("❌ DB connection failed on cold start:", error);
+      // Continue anyway - let individual routes handle DB errors
+    }
+  }
+  return handler(req, res);
+};
 
