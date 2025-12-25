@@ -64,6 +64,20 @@ app.use(express.urlencoded({ extended: false }));
 app.use(helmet());
 app.use(morgan(process.env.NODE_ENV === "production" ? "combined" : "dev"));
 
+// Ensure database connection before handling any request
+app.use(async (req, res, next) => {
+  try {
+    await connectDB();
+    next();
+  } catch (error) {
+    console.error("❌ Database connection failed:", error);
+    res.status(500).json({ 
+      error: "Database connection failed",
+      message: process.env.NODE_ENV === "production" ? "Internal server error" : error.message 
+    });
+  }
+});
+
 app.get("/api/health", (_req, res) => {
   res.json({ status: "ok" });
 });
@@ -80,43 +94,17 @@ app.use("/api/kb", longCache, kbRoutes);
 app.use(notFound);
 app.use(errorHandler);
 
-let dbConnected = false;
-const handler = serverless(app);
+// For local development
+const PORT = process.env.PORT || 5501;
 
-async function ensureDbConnected() {
-  if (!dbConnected) {
-    try {
-      await connectDB();
-      dbConnected = true;
-      console.log("✅ Database connection established");
-      
-      // Run seed only when explicitly requested (avoid destructive ops on cold starts)
-      if (process.env.SEED_ON_BOOT === "true") {
-        try {
-          await seedContent();
-        } catch (err) {
-          console.error("Seed error:", err);
-        }
-      }
-    } catch (error) {
-      console.error("❌ Failed to connect to database:", error.message);
-      throw error;
-    }
-  }
+if (process.env.NODE_ENV !== "production") {
+  // Local development server
+  app.listen(PORT, async () => {
+    await connectDB();
+    console.log(`🚀 Server running on port ${PORT}`);
+  });
 }
 
-export default async function (req, res) {
-  try {
-    await ensureDbConnected();
-    return handler(req, res);
-  } catch (error) {
-    console.error("❌ Serverless function error:", error);
-    return res.status(500).json({ 
-      error: "Internal Server Error",
-      message: process.env.NODE_ENV === "production" 
-        ? "Unable to connect to database" 
-        : error.message 
-    });
-  }
-}
+// For Vercel serverless
+export default serverless(app);
 
