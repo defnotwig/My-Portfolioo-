@@ -91,21 +91,11 @@ if (process.env.NODE_ENV !== "production") {
   });
 }
 
-// For Vercel serverless - connect DB once on cold start
-let isConnected = false;
+// For Vercel serverless
+// Connect DB at module level (runs once on cold start)
+if (process.env.NODE_ENV === "production") {
+  connectDB().catch(err => console.error("❌ DB connection failed:", err));
+}
 
-const handler = serverless(app);
-
-export default async (req, res) => {
-  if (!isConnected) {
-    try {
-      await connectDB();
-      isConnected = true;
-    } catch (error) {
-      console.error("❌ DB connection failed on cold start:", error);
-      // Continue anyway - let individual routes handle DB errors
-    }
-  }
-  return handler(req, res);
-};
+export default serverless(app);
 
