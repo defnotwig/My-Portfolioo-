@@ -27,6 +27,8 @@ const allowedOrigins = [
   "http://localhost:4173",
   // Vercel deployment URLs
   "https://gabriel-ludwig-rivera.vercel.app",
+  "https://glrivera.dev",
+  "https://www.glrivera.dev",
   "https://gabrielludwig.dev",
   // Allow all Vercel preview deployments
   /\.vercel\.app$/,
