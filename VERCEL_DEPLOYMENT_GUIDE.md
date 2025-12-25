@@ -7,6 +7,7 @@ This guide will walk you through deploying your **full-stack portfolio** on Verc
 ## 📋 Overview
 
 Your portfolio consists of:
+
 - **Frontend (Client)**: Vite + React app
 - **Backend (Server)**: Express.js + MongoDB API
 
@@ -17,6 +18,7 @@ We'll deploy these as **two separate Vercel projects** that communicate with eac
 ## 🔧 Prerequisites
 
 Before starting, make sure you have:
+
 - [ ] A [Vercel account](https://vercel.com/signup) (free tier works)
 - [ ] A [GitHub account](https://github.com) with your code pushed
 - [ ] Your MongoDB Atlas connection string ready
@@ -71,28 +73,28 @@ We deploy the backend first so we can get the API URL for the frontend.
 
 On the configuration screen, set the following:
 
-| Setting | Value |
-|---------|-------|
-| **Project Name** | `portfolio-backend` (or any name you prefer) |
-| **Framework Preset** | `Other` |
-| **Root Directory** | Click **"Edit"** → Enter `server` → Click **"Continue"** |
-| **Build Command** | Leave empty (we use serverless functions) |
-| **Output Directory** | Leave empty |
-| **Install Command** | `npm install` |
+| Setting              | Value                                                    |
+| -------------------- | -------------------------------------------------------- |
+| **Project Name**     | `portfolio-backend` (or any name you prefer)             |
+| **Framework Preset** | `Other`                                                  |
+| **Root Directory**   | Click **"Edit"** → Enter `server` → Click **"Continue"** |
+| **Build Command**    | Leave empty (we use serverless functions)                |
+| **Output Directory** | Leave empty                                              |
+| **Install Command**  | `npm install`                                            |
 
 ### 2.4 Add Environment Variables
 
 Click **"Environment Variables"** and add these:
 
-| Name | Value |
-|------|-------|
-| `PORT` | `5501` |
-| `MONGO_URI` | `mongodb+srv://ludwigrivera13:humbleludwig13pogi@cluster0.typrbgy.mongodb.net/gabriel_portfolio?retryWrites=true&w=majority&appName=Cluster0` |
-| `CLIENT_ORIGIN` | `https://your-frontend-name.vercel.app` (update after frontend deploy) |
-| `NODE_ENV` | `production` |
-| `OPENAI_API_KEY` | *(your key if using AI chat)* |
-| `GEMINI_API_KEY` | *(your key if using Gemini)* |
-| `GEMINI_MODEL` | `gemini-2.5-pro` *(if using Gemini)* |
+| Name             | Value                                                                                                                                         |
+| ---------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| `PORT`           | `5501`                                                                                                                                        |
+| `MONGO_URI`      | `mongodb+srv://ludwigrivera13:humbleludwig13pogi@cluster0.typrbgy.mongodb.net/gabriel_portfolio?retryWrites=true&w=majority&appName=Cluster0` |
+| `CLIENT_ORIGIN`  | `https://your-frontend-name.vercel.app` (update after frontend deploy)                                                                        |
+| `NODE_ENV`       | `production`                                                                                                                                  |
+| `OPENAI_API_KEY` | _(your key if using AI chat)_                                                                                                                 |
+| `GEMINI_API_KEY` | _(your key if using Gemini)_                                                                                                                  |
+| `GEMINI_MODEL`   | `gemini-2.5-pro` _(if using Gemini)_                                                                                                          |
 
 ### 2.5 Deploy Backend
 
@@ -103,6 +105,7 @@ Click **"Environment Variables"** and add these:
 ### 2.6 Test Backend
 
 Visit your backend health endpoint to verify:
+
 ```
 https://YOUR-BACKEND-URL.vercel.app/api/health
 ```
@@ -121,21 +124,21 @@ You should see: `{"status":"ok"}`
 
 ### 3.2 Configure Frontend Deployment
 
-| Setting | Value |
-|---------|-------|
-| **Project Name** | `gabriel-ludwig-rivera` (or your preferred name) |
-| **Framework Preset** | `Vite` (should auto-detect) |
-| **Root Directory** | Click **"Edit"** → Enter `client` → Click **"Continue"** |
-| **Build Command** | `npm run build` |
-| **Output Directory** | `dist` |
-| **Install Command** | `npm install` |
+| Setting              | Value                                                    |
+| -------------------- | -------------------------------------------------------- |
+| **Project Name**     | `gabriel-ludwig-rivera` (or your preferred name)         |
+| **Framework Preset** | `Vite` (should auto-detect)                              |
+| **Root Directory**   | Click **"Edit"** → Enter `client` → Click **"Continue"** |
+| **Build Command**    | `npm run build`                                          |
+| **Output Directory** | `dist`                                                   |
+| **Install Command**  | `npm install`                                            |
 
 ### 3.3 Add Environment Variables
 
 Click **"Environment Variables"** and add:
 
-| Name | Value |
-|------|-------|
+| Name           | Value                                 |
+| -------------- | ------------------------------------- |
 | `VITE_API_URL` | `https://YOUR-BACKEND-URL.vercel.app` |
 
 > ⚠️ **Important**: Replace `YOUR-BACKEND-URL` with the actual backend URL from Step 2.5
@@ -227,13 +230,13 @@ npm run seed
 
 Open these URLs in your browser (replace with your actual backend URL):
 
-| Endpoint | Expected Result |
-|----------|-----------------|
-| `/api/health` | `{"status":"ok"}` |
-| `/api/about` | Your about data |
-| `/api/projects` | Your projects list |
-| `/api/experience` | Your experience data |
-| `/api/certifications` | Your certifications |
+| Endpoint               | Expected Result      |
+| ---------------------- | -------------------- |
+| `/api/health`          | `{"status":"ok"}`    |
+| `/api/about`           | Your about data      |
+| `/api/projects`        | Your projects list   |
+| `/api/experience`      | Your experience data |
+| `/api/certifications`  | Your certifications  |
 | `/api/recommendations` | Your recommendations |
 
 ### 7.2 Test Frontend
@@ -261,19 +264,22 @@ Open these URLs in your browser (replace with your actual backend URL):
 
 #### ❌ "Failed to fetch" Errors
 
-**Solution**: 
+**Solution**:
+
 1. Check that `VITE_API_URL` in frontend points to correct backend URL
 2. Verify backend is deployed and `/api/health` returns OK
 
 #### ❌ "MongoDB Connection Error"
 
 **Solution**:
+
 1. Verify `MONGO_URI` is correct in backend environment variables
 2. Check MongoDB Atlas → Network Access → Add `0.0.0.0/0` to allow all IPs
 
 #### ❌ Build Fails on Vercel
 
 **Solution**:
+
 1. Check the build logs for specific error
 2. Make sure `Root Directory` is set correctly (`client` or `server`)
 3. Verify all dependencies are in `package.json`
@@ -281,6 +287,7 @@ Open these URLs in your browser (replace with your actual backend URL):
 #### ❌ Backend Returns 404
 
 **Solution**: The `vercel.json` in the server folder handles routing. Make sure:
+
 1. File exists at `server/vercel.json`
 2. Routes point to `src/index.js`
 
@@ -289,6 +296,7 @@ Open these URLs in your browser (replace with your actual backend URL):
 ## 📝 Environment Variables Summary
 
 ### Backend (server)
+
 ```env
 PORT=5501
 MONGO_URI=your_mongodb_connection_string
@@ -300,6 +308,7 @@ GEMINI_MODEL=gemini-2.5-pro (optional)
 ```
 
 ### Frontend (client)
+
 ```env
 VITE_API_URL=https://your-backend.vercel.app
 ```
@@ -325,18 +334,19 @@ Both frontend and backend will automatically redeploy! 🎉
 
 After deployment, fill in your actual URLs:
 
-| Project | URL |
-|---------|-----|
-| **Frontend** | `https://______________________.vercel.app` |
-| **Backend API** | `https://______________________.vercel.app` |
-| **Health Check** | `https://______________________.vercel.app/api/health` |
-| **Custom Domain** | `https://gabrielludwig.dev` (if configured) |
+| Project           | URL                                                    |
+| ----------------- | ------------------------------------------------------ |
+| **Frontend**      | `https://______________________.vercel.app`            |
+| **Backend API**   | `https://______________________.vercel.app`            |
+| **Health Check**  | `https://______________________.vercel.app/api/health` |
+| **Custom Domain** | `https://gabrielludwig.dev` (if configured)            |
 
 ---
 
 ## 🎉 Congratulations!
 
 Your full-stack portfolio is now live on Vercel with:
+
 - ✅ Vite + React frontend
 - ✅ Express.js + MongoDB backend
 - ✅ Serverless functions for API
@@ -346,4 +356,4 @@ Your full-stack portfolio is now live on Vercel with:
 
 ---
 
-*Last updated: December 26, 2025*
+_Last updated: December 26, 2025_

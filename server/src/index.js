@@ -85,21 +85,38 @@ const handler = serverless(app);
 
 async function ensureDbConnected() {
   if (!dbConnected) {
-    await connectDB();
-    dbConnected = true;
-    // Run seed only when explicitly requested (avoid destructive ops on cold starts)
-    if (process.env.SEED_ON_BOOT === "true") {
-      try {
-        await seedContent();
-      } catch (err) {
-        console.error("Seed error:", err);
+    try {
+      await connectDB();
+      dbConnected = true;
+      console.log("✅ Database connection established");
+      
+      // Run seed only when explicitly requested (avoid destructive ops on cold starts)
+      if (process.env.SEED_ON_BOOT === "true") {
+        try {
+          await seedContent();
+        } catch (err) {
+          console.error("Seed error:", err);
+        }
       }
+    } catch (error) {
+      console.error("❌ Failed to connect to database:", error.message);
+      throw error;
     }
   }
 }
 
 export default async function (req, res) {
-  await ensureDbConnected();
-  return handler(req, res);
+  try {
+    await ensureDbConnected();
+    return handler(req, res);
+  } catch (error) {
+    console.error("❌ Serverless function error:", error);
+    return res.status(500).json({ 
+      error: "Internal Server Error",
+      message: process.env.NODE_ENV === "production" 
+        ? "Unable to connect to database" 
+        : error.message 
+    });
+  }
 }
 
