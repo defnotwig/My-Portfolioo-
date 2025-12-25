@@ -15,7 +15,6 @@ import chatRoutes from "./routes/chatRoutes.js";
 import kbRoutes from "./routes/kbRoutes.js";
 import { errorHandler, notFound } from "./middleware/errorHandler.js";
 import { longCache } from "./middleware/cache.js";
-import serverless from "serverless-http";
 
 const app = express();
 
@@ -80,20 +79,17 @@ app.use("/api/kb", longCache, kbRoutes);
 app.use(notFound);
 app.use(errorHandler);
 
-// For local development
+// Start server
 const PORT = process.env.PORT || 5501;
 
-if (process.env.NODE_ENV !== "production") {
-  // Local development server
-  app.listen(PORT, async () => {
+app.listen(PORT, async () => {
+  try {
     await connectDB();
+    console.log(`✅ MongoDB connected`);
     console.log(`🚀 Server running on port ${PORT}`);
-  });
-} else {
-  // For production serverless - connect DB immediately (non-blocking)
-  connectDB();
-}
-
-// Export serverless handler
-export default serverless(app);
+  } catch (error) {
+    console.error("❌ Failed to start server:", error);
+    process.exit(1);
+  }
+});
 
