@@ -53,27 +53,27 @@ const TestimonialsColumn = ({ testimonials, duration = 15, className = "" }) => 
 // Fallback data in case API fails
 const fallbackTestimonials = [
   {
-    text: "Gabriel is a good student and software developer who shows professionalism and dedication in whatever he does. His software projects during his academic years are up to standard and is being used by our department for some of its operations. Gabriel also demonstrated social awareness and leadership skills through his involvement as an officer in the CCC IT Society.",
+    text: "A highly dependable student and developer, Gabriel consistently produces quality systems that meet professional standards. His leadership and initiative within the CCC IT Society further reflect his professionalism.",
     name: "Jasper Garcia, MIT",
     role: "Professor, Former Adviser of CCC ITS, City College of Calamba",
   },
   {
-    text: "Gabriel has shown remarkable growth from his freshman year in Introduction to Programming to now leading the development of the K-WISE PC Builder Kiosk. His foundational logic and problem-solving skills have evolved impressively. As their Research Adviser, I've witnessed how he guides his team through systematic development and rigorous mock defenses.",
+    text: "From introductory programming to leading the K-WISE PC Builder Kiosk, Gabriel’s growth has been remarkable. He applies strong logic, clear structure, and confident leadership throughout the development process.",
     name: "Regina Almonte, PhD",
     role: "Research Adviser & Professor, City College of Calamba",
   },
   {
-    text: "Gabriel demonstrated exceptional technical competence during our Capstone Defense panels. His ability to articulate system architecture and handle complex questions shows his deep understanding of software development. He's dependable and consistently delivers quality work for dashboards and automation systems.",
+    text: "During capstone defense panels, Gabriel stood out for his clarity in explaining system architecture and answering complex questions. His work reflects both technical depth and reliability.",
     name: "Arlou Fernando, MIT",
     role: "Dean, DCI & Lead Capstone Panel, City College of Calamba",
   },
   {
-    text: "Working with Gabriel on the K-WISE PC Builder Kiosk has been an incredible experience. As a full-stack developer, he seamlessly connected my UI/UX designs with the backend, guided our workflow, and ensured smooth deployment. His technical leadership and dedication made our capstone project a success.",
+    text: "Working alongside Gabriel on our capstone project showed his strength as a technical leader. He successfully integrated UI/UX with backend systems while guiding the team toward smooth deployment.",
     name: "Kent Cyrem Patasin",
     role: "Former CCC ITS President & UI/UX Designer, City College of Calamba",
   },
   {
-    text: "Gabriel's expertise in backend development and system integration was crucial for our capstone project. He patiently guided me through the development workflow and helped connect my frontend work with the backend seamlessly. His mentorship accelerated my growth as a developer.",
+    text: "As the backend lead of our capstone project, Gabriel made system integration seamless and easy to understand. His companionship and patience greatly improved my development skills.",
     name: "Jake Mesina",
     role: "Frontend Developer & Colleague, City College of Calamba",
   },
