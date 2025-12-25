@@ -122,7 +122,7 @@ export default function Header() {
                   className="relative bg-foreground dark:bg-white hover:bg-foreground/90 dark:hover:bg-gray-50 text-background dark:text-black font-medium px-6 py-2 rounded-full transition-all duration-300 hover:scale-105 hover:shadow-lg cursor-pointer"
                   onClick={() => handleNav("#contact")}
                 >
-                  Schedule a Call
+                  Get In Touch
                 </button>
               </div>
 

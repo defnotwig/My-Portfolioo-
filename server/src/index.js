@@ -22,6 +22,8 @@ const allowedOrigins = [
   process.env.CLIENT_ORIGIN || "http://localhost:3501",
   "http://localhost:3502",
   "http://localhost:3503",
+  "http://localhost:3504",
+  "http://localhost:3505",
   "http://localhost:4173",
   // Vercel deployment URLs
   "https://gabriel-ludwig-rivera.vercel.app",

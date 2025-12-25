@@ -24,27 +24,35 @@ const aboutData = {
 
 const experienceData = [
     {
-        title: "Membership & Election Committee Head",
-        organization: "Infomation Technology Society",
-        timeframe: "2024 – Present",
-        description:
-            "Leading campus-wide student initiatives, election systems, and process automation for the IT student community.",
-        order: 1,
-    },
-    {
-        title: "Project Lead",
-        organization: "K-WISE PC Builder Kiosk",
-        timeframe: "2025",
-        description:
-            "Designed and deployed a self-service PC builder kiosk with an AI engine (Ollama DeepSeek R1) and 3,200+ compatibility rules, real-time build validation, and recommendation workflows informed by 32,240 historical compatibility checks.",
-        order: 2,
-    },
-    {
         title: "Quality Assurance — Failed Deliveries",
         organization: "Shopee Philippines",
         timeframe: "Apr – Oct 2022",
         description:
             "Led end-to-end quality assurance for failed deliveries from key 3PL partners, performing barcode and item audits, parcel damage categorization, and QA compliance reporting to support return logistics and warehouse control.",
+        order: 1,
+    },
+    {
+        title: "Membership & Election Committee Head",
+        organization: "Infomation Technology Society",
+        timeframe: "2024 – 2025",
+        description:
+            "Leading campus-wide student initiatives, election systems, and process automation for the IT student community.",
+        order: 2,
+    },
+    {
+        title: "Project Lead",
+        organization: "K-WISE PC Builder Kiosk",
+        timeframe: "Mar – Dec 2025",
+        description:
+            "Designed and deployed a self-service PC builder kiosk with an AI engine (Ollama DeepSeek R1) and 3,200+ compatibility rules, real-time build validation, and recommendation workflows informed by 32,240 historical compatibility checks.",
+        order: 3,
+    },
+    {
+        title: "BS Information Technology",
+        organization: "City College of Calamba",
+        timeframe: "2022 – Present",
+        description:
+            "Focusing on systems development, AI experimentation, and community-driven tech advocacy.",
         order: 4,
     },
     {
@@ -54,14 +62,6 @@ const experienceData = [
         description:
             "Delivering bespoke web platforms, APIs, and automation scripts for MSMEs and campus partners.",
         order: 5,
-    },
-    {
-        title: "BS Information Technology",
-        organization: "City College of Calamba",
-        timeframe: "2022 – Present",
-        description:
-            "Focusing on systems development, AI experimentation, and community-driven tech advocacy.",
-        order: 6,
     },
 ];
 
