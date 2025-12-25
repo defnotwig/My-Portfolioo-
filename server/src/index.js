@@ -89,13 +89,11 @@ if (process.env.NODE_ENV !== "production") {
     await connectDB();
     console.log(`🚀 Server running on port ${PORT}`);
   });
+} else {
+  // For production serverless - connect DB immediately (non-blocking)
+  connectDB();
 }
 
-// For Vercel serverless
-// Connect DB at module level (runs once on cold start)
-if (process.env.NODE_ENV === "production") {
-  connectDB().catch(err => console.error("❌ DB connection failed:", err));
-}
-
+// Export serverless handler
 export default serverless(app);
 
