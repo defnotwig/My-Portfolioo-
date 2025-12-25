@@ -217,12 +217,12 @@ export default function Hero({ about }) {
     {
       title: "Top 1 Performing Student 3rd Year 2025",
       description: "Achieved the highest academic standing among 3rd year IT students, maintaining excellence in both theoretical knowledge and practical skills.",
-      images: ["/images/achievements/top1-3rd-1.jpg", "/images/achievements/top1-3rd-2.jpg", "/images/achievements/top1-3rd-3.jpg"]
+      images: ["/images/achievements/top1-3rd-1.jpg", "/images/achievements/top1-3rd-2.jpg"]
     },
     {
       title: "Top 4 Performing Student 2nd Year 2024",
       description: "Ranked among the top 4 performing students in the 2nd year cohort, demonstrating consistent academic excellence and leadership.",
-      images: ["/images/achievements/top4-2nd-1.png", "/images/achievements/top4-2nd-2.jpg", "/images/achievements/top4-2nd-3.jpg"]
+      images: ["/images/achievements/top4-2nd-1.png"]
     }
   ];
 

@@ -1,5 +1,6 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
+import { api } from "@/lib/api";
 
 const TestimonialCard = ({ text, name, role }) => {
   return (
@@ -49,8 +50,59 @@ const TestimonialsColumn = ({ testimonials, duration = 15, className = "" }) => 
   );
 };
 
+// Fallback data in case API fails
+const fallbackTestimonials = [
+  {
+    text: "Gabriel is a good student and software developer who shows professionalism and dedication in whatever he does. His software projects during his academic years are up to standard and is being used by our department for some of its operations. Gabriel also demonstrated social awareness and leadership skills through his involvement as an officer in the CCC IT Society.",
+    name: "Jasper Garcia, MIT",
+    role: "Professor, Former Adviser of CCC ITS, City College of Calamba",
+  },
+  {
+    text: "Gabriel has shown remarkable growth from his freshman year in Introduction to Programming to now leading the development of the K-WISE PC Builder Kiosk. His foundational logic and problem-solving skills have evolved impressively. As their Research Adviser, I've witnessed how he guides his team through systematic development and rigorous mock defenses.",
+    name: "Regina Almonte, PhD",
+    role: "Research Adviser & Professor, City College of Calamba",
+  },
+  {
+    text: "Gabriel demonstrated exceptional technical competence during our Capstone Defense panels. His ability to articulate system architecture and handle complex questions shows his deep understanding of software development. He's dependable and consistently delivers quality work for dashboards and automation systems.",
+    name: "Arlou Fernando, MIT",
+    role: "Dean, DCI & Lead Capstone Panel, City College of Calamba",
+  },
+  {
+    text: "Working with Gabriel on the K-WISE PC Builder Kiosk has been an incredible experience. As a full-stack developer, he seamlessly connected my UI/UX designs with the backend, guided our workflow, and ensured smooth deployment. His technical leadership and dedication made our capstone project a success.",
+    name: "Kent Cyrem Patasin",
+    role: "Former CCC ITS President & UI/UX Designer, City College of Calamba",
+  },
+  {
+    text: "Gabriel's expertise in backend development and system integration was crucial for our capstone project. He patiently guided me through the development workflow and helped connect my frontend work with the backend seamlessly. His mentorship accelerated my growth as a developer.",
+    name: "Jake Mesina",
+    role: "Frontend Developer & Colleague, City College of Calamba",
+  },
+];
+
 export default function Recommendations() {
   const sectionRef = useRef(null);
+  const [testimonials, setTestimonials] = useState(fallbackTestimonials);
+
+  useEffect(() => {
+    // Fetch recommendations from API
+    const fetchRecommendations = async () => {
+      try {
+        const response = await api.get("/recommendations");
+        if (response.data && response.data.length > 0) {
+          const mapped = response.data.map((rec) => ({
+            text: rec.quote,
+            name: rec.author,
+            role: rec.role,
+          }));
+          setTestimonials(mapped);
+        }
+      } catch (error) {
+        console.warn("Using fallback recommendations:", error.message);
+      }
+    };
+
+    fetchRecommendations();
+  }, []);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -75,25 +127,6 @@ export default function Recommendations() {
 
     return () => observer.disconnect();
   }, []);
-
-  // Original 3 recommendations - single source of truth
-  const testimonials = [
-    {
-      text: "Gabriel is one of those students who quietly ships solid work. His projects are clean, reliable, and easy to maintain.",
-      name: "Jasper Garcia",
-      role: "Professor, City College of Calamba",
-    },
-    {
-      text: "He handled our student org systems with a good balance of leadership and discipline. Processes became smoother and easier to track.",
-      name: "Regina Almonte",
-      role: "Research Adviser, City College of Calamba",
-    },
-    {
-      text: "Gabriel is dependable and quick to respond. When we need dashboards or automations updated, he gets them done without fuss.",
-      name: "Arlou Fernando",
-      role: "Dean, DCI, City College of Calamba",
-    },
-  ];
 
   return (
     <section id="recommendations" ref={sectionRef} className="relative py-20 px-4 sm:px-6 lg:px-8">
@@ -138,14 +171,14 @@ export default function Recommendations() {
               WebkitMaskImage: "linear-gradient(to bottom, transparent 0%, black 8%, black 92%, transparent 100%)",
             }}
           >
-            <TestimonialsColumn testimonials={testimonials} duration={22} className="flex-1" />
+            <TestimonialsColumn testimonials={testimonials.slice(0, 2).concat(testimonials.slice(3))} duration={22} className="flex-1" />
             <TestimonialsColumn
-              testimonials={[testimonials[2], testimonials[0], testimonials[1]]}
+              testimonials={[testimonials[2], testimonials[0], testimonials[4], testimonials[1], testimonials[3]].filter(Boolean)}
               duration={18}
               className="flex-1 hidden md:block"
             />
             <TestimonialsColumn
-              testimonials={[testimonials[1], testimonials[2], testimonials[0]]}
+              testimonials={[testimonials[1], testimonials[3], testimonials[0], testimonials[4], testimonials[2]].filter(Boolean)}
               duration={26}
               className="flex-1 hidden lg:block"
             />

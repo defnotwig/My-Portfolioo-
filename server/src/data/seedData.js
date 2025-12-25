@@ -138,33 +138,33 @@ const certificationData = [
 const recommendationData = [
     {
         quote:
-            "Gabriel is one of those students who quietly ships solid work. His projects are clean, reliable, and easy to maintain.",
-        author: "Jasper Garcia",
-        role: "Professor, City College of Calamba",
+            "Gabriel is a good student and software developer who shows professionalism and dedication in whatever he does. His software projects during his academic years are up to standard and is being used by our department for some of its operations. Gabriel also demonstrated social awareness and leadership skills through his involvement as an officer in the CCC IT Society.",
+        author: "Jasper Garcia, MIT",
+        role: "Professor, Former Adviser of CCC ITS, City College of Calamba",
     },
     {
         quote:
-            "He handled our student org systems with a good balance of leadership and discipline. Processes became smoother and easier to track.",
-        author: "Regina Almonte",
-        role: "Research Adviser, City College of Calamba",
+            "Gabriel has shown remarkable growth from his freshman year in Introduction to Programming to now leading the development of the K-WISE PC Builder Kiosk. His foundational logic and problem-solving skills have evolved impressively. As their Research Adviser, I've witnessed how he guides his team through systematic development and rigorous mock defenses.",
+        author: "Regina Almonte, PhD",
+        role: "Research Adviser & Professor, City College of Calamba",
     },
     {
         quote:
-            "Gabriel is dependable and quick to respond. When we need dashboards or automations updated, he gets them done without fuss.",
-        author: "Arlou Fernando",
-        role: "Dean, DCI, City College of Calamba",
+            "Gabriel demonstrated exceptional technical competence during our Capstone Defense panels. His ability to articulate system architecture and handle complex questions shows his deep understanding of software development. He's dependable and consistently delivers quality work for dashboards and automation systems.",
+        author: "Arlou Fernando, MIT",
+        role: "Dean, DCI & Lead Capstone Panel, City College of Calamba",
     },
     {
         quote:
-            "Gabriel is dependable and quick to respond. When we need dashboards or automations updated, he gets them done without fuss.",
+            "Working with Gabriel on the K-WISE PC Builder Kiosk has been an incredible experience. As a full-stack developer, he seamlessly connected my UI/UX designs with the backend, guided our workflow, and ensured smooth deployment. His technical leadership and dedication made our capstone project a success.",
         author: "Kent Cyrem Patasin",
-        role: "Colleague, BSIT, City College of Calamba",
+        role: "Former CCC ITS President & UI/UX Designer, City College of Calamba",
     },
     {
         quote:
-            "Gabriel is dependable and quick to respond. When we need dashboards or automations updated, he gets them done without fuss.",
+            "Gabriel's expertise in backend development and system integration was crucial for our capstone project. He patiently guided me through the development workflow and helped connect my frontend work with the backend seamlessly. His mentorship accelerated my growth as a developer.",
         author: "Jake Mesina",
-        role: "Colleague, BSIT, City College of Calamba",
+        role: "Frontend Developer & Colleague, City College of Calamba",
     },
 ];
 

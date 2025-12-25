@@ -23,16 +23,36 @@ const allowedOrigins = [
   "http://localhost:3502",
   "http://localhost:3503",
   "http://localhost:4173",
+  // Vercel deployment URLs
+  "https://gabriel-ludwig-rivera.vercel.app",
+  "https://gabrielludwig.dev",
+  // Allow all Vercel preview deployments
+  /\.vercel\.app$/,
 ];
 
 const corsOptions = {
   origin(origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) {
+    // Allow requests with no origin (mobile apps, curl, etc.)
+    if (!origin) {
+      callback(null, true);
+      return;
+    }
+    
+    // Check against allowed origins (strings and regex patterns)
+    const isAllowed = allowedOrigins.some((allowed) => {
+      if (allowed instanceof RegExp) {
+        return allowed.test(origin);
+      }
+      return allowed === origin;
+    });
+    
+    if (isAllowed) {
       callback(null, true);
     } else {
       callback(new Error("Not allowed by CORS"));
     }
   },
+  credentials: true,
 };
 
 app.use(cors(corsOptions));
