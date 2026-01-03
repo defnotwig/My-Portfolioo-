@@ -83,8 +83,8 @@ export default function Header() {
     <>
       <nav
         className={`fixed top-4 md:top-8 left-1/2 -translate-x-1/2 z-50 transition-all duration-500 ${
-          isVisible ? "translate-y-0 opacity-100" : "-translate-y-20 md:-translate-y-24 opacity-0"
-        } ${hasLoaded ? "" : "opacity-0 translate-y-4"}`}
+          isVisible ? "translate-y-0 opacity-100" : "-translate-y-20 md:-translate-y-24 opacity-0 pointer-events-none"
+        } ${hasLoaded ? "" : "opacity-0 translate-y-4 pointer-events-none"}`}
         style={{
           transition: hasLoaded ? "transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease" : "opacity 0.8s ease-out, transform 0.8s ease-out",
         }}
@@ -150,11 +150,11 @@ export default function Header() {
           </div>
         </div>
 
-        <div className="md:hidden relative">
+        <div className={`md:hidden relative ${!isOpen ? 'pointer-events-none' : ''}`}>
           {/* Backdrop overlay */}
           <div
             className={`fixed inset-0 bg-black/20 backdrop-blur-sm transition-all duration-300 ${
-              isOpen ? "opacity-100" : "opacity-0 pointer-events-none"
+              isOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
             }`}
             onClick={() => setIsOpen(false)}
             style={{ top: "0", left: "0", right: "0", bottom: "0", zIndex: -1 }}

@@ -538,4 +538,54 @@ body {
     animation: mobile-menu-item 0.4s ease-out forwards;
     opacity: 0;
   }
+
+  /* Touch-friendly interactions for mobile */
+  @media (hover: none) and (pointer: coarse) {
+    /* Improve tap targets on touch devices */
+    .liquid-glass-btn,
+    .glass-card,
+    .social-glass-item {
+      min-height: 44px;
+      min-width: 44px;
+    }
+    
+    /* Remove hover effects that don't work well on touch */
+    .liquid-glass:hover,
+    .liquid-glass-btn:hover,
+    .glass-card:hover {
+      transform: none;
+    }
+    
+    /* Add active state for touch feedback */
+    .liquid-glass:active,
+    .liquid-glass-btn:active,
+    .glass-card:active {
+      transform: scale(0.98);
+      opacity: 0.9;
+    }
+    
+    /* Profile image tap feedback */
+    .profile-tap-active {
+      transform: scale(0.95);
+      transition: transform 0.15s ease-out;
+    }
+  }
+  
+  /* Mobile/Tablet specific popup adjustments */
+  @media (max-width: 1279px) {
+    .achievement-popup-mobile {
+      position: fixed !important;
+      left: 1rem !important;
+      right: 1rem !important;
+      max-width: calc(100vw - 2rem) !important;
+    }
+    
+    .achievements-dropdown-mobile {
+      position: fixed !important;
+      left: 1rem !important;
+      right: 1rem !important;
+      width: auto !important;
+      max-width: calc(100vw - 2rem) !important;
+    }
+  }
 }
