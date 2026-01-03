@@ -92,7 +92,7 @@ export default function Home() {
       )}
       
       {!loading && !error && (
-        <main className="relative z-10 space-y-24 pb-24 pt-32">
+        <main className="relative z-10 space-y-16 sm:space-y-24 pb-16 sm:pb-24 pt-24 sm:pt-32">
           <Hero about={about} />
           <About about={about} experience={experience} />
           <Suspense fallback={<div className="section-container py-16"><div className="h-32 rounded-3xl liquid-glass animate-pulse" /></div>}>

@@ -1,17 +1,18 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { createPortal } from "react-dom";
 import { Mail, Linkedin, Github, ChevronDown, Moon, Sun } from "lucide-react";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 
-// iOS-style verified badge component
+// iOS-style verified badge component - positioned directly after name with no gap
 const VerifiedBadge = () => (
   <svg 
-    className="h-6 w-6 flex-shrink-0" 
+    className="h-4 w-4 sm:h-5 sm:w-5 flex-shrink-0 ml-1 inline-block align-middle" 
     viewBox="0 0 24 24" 
     fill="none"
     aria-label="Verified"
+    style={{ marginLeft: '2px', verticalAlign: 'text-bottom' }}
   >
     <circle cx="12" cy="12" r="10" fill="#3B82F6" />
     <path 
@@ -34,8 +35,8 @@ const LocationPin = () => (
 );
 
 // Achievement Popup with Carousel and Liquid Glass Effect - Full-size images
-// Renders as a fixed modal-like popup to ensure visibility on all devices
-const AchievementPopup = ({ achievement, carouselIndex, setCarouselIndex, isMobile, onClose }) => {
+// Renders as a fixed centered modal on ALL devices for consistent UX
+const AchievementPopup = ({ achievement, carouselIndex, setCarouselIndex, isMobile, isTablet, onClose }) => {
   const [localIndex, setLocalIndex] = useState(carouselIndex);
   const [imageOrientation, setImageOrientation] = useState('landscape'); // 'landscape' or 'portrait'
   const [imageLoaded, setImageLoaded] = useState(false);
@@ -77,84 +78,104 @@ const AchievementPopup = ({ achievement, carouselIndex, setCarouselIndex, isMobi
     e.target.src = '/images/profile.jpg';
   };
 
-  // For mobile and tablet (< 1280px), always use fixed centered modal
-  // For desktop, position to the LEFT of the dropdown to prevent overflow
-  const isSmallScreen = isMobile;
+  // Determine sizing based on device type
+  const isSmallDevice = isMobile || isTablet;
+  
+  // Get responsive popup width
+  const getPopupWidth = () => {
+    if (isMobile) return 'min(calc(100vw - 32px), 340px)';
+    if (isTablet) return 'min(calc(100vw - 48px), 400px)';
+    return imageOrientation === 'portrait' ? 'min(380px, 45vw)' : 'min(480px, 50vw)';
+  };
+
+  // Get responsive max height
+  const getMaxHeight = () => {
+    if (isMobile) return '75vh';
+    if (isTablet) return '70vh';
+    return '70vh';
+  };
 
   return (
     <motion.div
-      initial={{ opacity: 0, scale: 0.95, y: isSmallScreen ? 20 : 0, x: isSmallScreen ? 0 : 20 }}
-      animate={{ opacity: 1, scale: 1, y: 0, x: 0 }}
-      exit={{ opacity: 0, scale: 0.95, y: isSmallScreen ? 20 : 0, x: isSmallScreen ? 0 : 20 }}
-      transition={{ duration: 0.25, ease: "easeOut" }}
-      className={`${
-        isSmallScreen 
-          ? 'fixed inset-0 z-[10002] flex items-center justify-center p-4' 
-          : 'fixed left-4 top-1/2 -translate-y-1/2 z-[10002]'
-      } `}
+      initial={{ opacity: 0, scale: 0.95 }}
+      animate={{ opacity: 1, scale: 1 }}
+      exit={{ opacity: 0, scale: 0.95 }}
+      transition={{ duration: 0.2, ease: "easeOut" }}
+      className="fixed inset-0 z-[10002] flex items-center justify-center p-4"
       onClick={e => {
         e.stopPropagation();
-        if (isSmallScreen && e.target === e.currentTarget) {
+        if (e.target === e.currentTarget) {
           onClose?.();
         }
       }}
     >
-      {/* Backdrop overlay for all screen sizes when popup is shown */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        className={`${isSmallScreen ? 'absolute inset-0' : 'fixed inset-0'} bg-black/50 backdrop-blur-sm -z-10`}
+      {/* Semi-transparent backdrop - NO blur for clear visibility */}
+      <div
+        className="absolute inset-0 bg-black/50 -z-10"
         onClick={(e) => {
           e.stopPropagation();
           onClose?.();
         }}
       />
       
-      {/* Popup content container */}
-      <div
-        className="rounded-2xl overflow-hidden shadow-2xl relative"
+      {/* Popup content container - centered and responsive */}
+      <motion.div
+        initial={{ y: 20 }}
+        animate={{ y: 0 }}
+        className="rounded-2xl overflow-hidden shadow-2xl relative bg-white dark:bg-gray-900"
         style={{
-          width: isSmallScreen ? 'min(calc(100vw - 32px), 500px)' : (imageOrientation === 'portrait' ? 'min(320px, 40vw)' : 'min(420px, 45vw)'),
-          maxHeight: isSmallScreen ? '80vh' : '70vh',
+          width: getPopupWidth(),
+          maxHeight: getMaxHeight(),
         }}
         onClick={e => e.stopPropagation()}
       >
+      {/* Close button - Always visible at top right */}
+      <button
+        onClick={(e) => {
+          e.stopPropagation();
+          onClose?.();
+        }}
+        className="absolute top-3 right-3 p-2 rounded-full bg-black/40 hover:bg-black/60 text-white transition-colors z-30"
+        aria-label="Close"
+      >
+        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+      
       {/* Carousel with Liquid Glass Effect on image area only */}
       <div 
         className="relative overflow-hidden"
         style={{
-          // Dynamic sizing: landscape = wider, portrait = taller - NO extra padding
-          aspectRatio: imageOrientation === 'portrait' ? '9/16' : '16/9',
-          maxHeight: imageOrientation === 'portrait' ? '55vh' : '35vh',
+          // Dynamic sizing: landscape = wider, portrait = taller
+          aspectRatio: imageOrientation === 'portrait' ? '9/14' : '16/10',
+          maxHeight: isMobile ? '45vh' : (isTablet ? '50vh' : '45vh'),
           background: 'linear-gradient(135deg, rgba(30,30,30,0.95) 0%, rgba(20,20,20,0.98) 100%)',
-          backdropFilter: 'blur(40px) saturate(200%)',
-          WebkitBackdropFilter: 'blur(40px) saturate(200%)',
         }}
       >
         {/* Liquid glass refraction overlay on image area - Apple style */}
         <div 
           className="absolute inset-0 pointer-events-none z-10"
           style={{
-            background: 'linear-gradient(135deg, rgba(255,182,193,0.08) 0%, rgba(173,216,230,0.08) 25%, rgba(255,218,185,0.08) 50%, rgba(221,160,221,0.08) 75%, rgba(152,251,152,0.08) 100%)',
-            boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.5), inset 0 -1px 0 rgba(0,0,0,0.05)',
+            background: 'linear-gradient(135deg, rgba(255,182,193,0.06) 0%, rgba(173,216,230,0.06) 25%, rgba(255,218,185,0.06) 50%, rgba(221,160,221,0.06) 75%, rgba(152,251,152,0.06) 100%)',
+            boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.3)',
           }}
         />
         
         {/* Loading placeholder */}
         {!imageLoaded && !imageFailed && (
           <div className="absolute inset-0 flex items-center justify-center bg-gray-100 dark:bg-gray-800">
-            <div className="animate-pulse text-gray-400">Loading...</div>
+            <div className="animate-pulse text-gray-400 text-sm">Loading...</div>
           </div>
         )}
         
         <AnimatePresence mode="wait">
           <motion.div
             key={localIndex}
-            initial={{ opacity: 0, x: 50 }}
+            initial={{ opacity: 0, x: 30 }}
             animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -50 }}
-            transition={{ duration: 0.3 }}
+            exit={{ opacity: 0, x: -30 }}
+            transition={{ duration: 0.25 }}
             className="absolute inset-0 flex items-center justify-center"
           >
             <img 
@@ -177,7 +198,7 @@ const AchievementPopup = ({ achievement, carouselIndex, setCarouselIndex, isMobi
                 setLocalIndex(idx);
               }}
               className={`h-2 rounded-full transition-all duration-300 cursor-pointer hover:opacity-80 ${
-                idx === localIndex ? 'bg-white w-6 shadow-lg' : 'bg-white/50 w-2 hover:bg-white/70'
+                idx === localIndex ? 'bg-white w-5 shadow-lg' : 'bg-white/50 w-2 hover:bg-white/70'
               }`}
               aria-label={`Go to image ${idx + 1}`}
             />
@@ -186,25 +207,16 @@ const AchievementPopup = ({ achievement, carouselIndex, setCarouselIndex, isMobi
       </div>
       
       {/* Description - Solid background for readability */}
-      <div className="p-4 bg-white dark:bg-gray-900 border-t border-gray-200/50 dark:border-gray-700/50 relative">
-        {/* Close button - Always visible for better UX */}
-        <button
-          onClick={(e) => {
-            e.stopPropagation();
-            onClose?.();
-          }}
-          className="absolute top-2 right-2 p-1.5 rounded-full bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors z-10"
-          aria-label="Close"
-        >
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
-        <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed pr-8">
+      <div className={`bg-white dark:bg-gray-900 border-t border-gray-200/50 dark:border-gray-700/50 ${
+        isMobile ? 'p-3' : 'p-4'
+      }`}>
+        <p className={`text-gray-700 dark:text-gray-300 leading-relaxed ${
+          isMobile ? 'text-xs' : (isTablet ? 'text-sm' : 'text-sm')
+        }`}>
           {achievement.description}
         </p>
       </div>
-      </div>
+      </motion.div>
     </motion.div>
   );
 };
@@ -216,8 +228,9 @@ export default function Hero({ about }) {
   const [hoveredAchievement, setHoveredAchievement] = useState(null);
   const [carouselIndex, setCarouselIndex] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
-  const [showTapHint, setShowTapHint] = useState(true);
+  const [isTablet, setIsTablet] = useState(false);
   const [profileTapped, setProfileTapped] = useState(false);
+  const profileRef = useRef(null);
 
   // Initialize theme on mount
   useEffect(() => {
@@ -230,22 +243,17 @@ export default function Hero({ about }) {
         document.documentElement.classList.remove("dark");
       }
       
-      // Detect if mobile/tablet - include all tablets up to 1280px
-      // This covers: phones, iPad Mini, iPad, iPad Air, iPad Pro, and most tablets
-      const checkMobile = () => {
-        setIsMobile(window.innerWidth < 1280);
+      // Detect device type: mobile (<768px), tablet (768-1279px), desktop (>=1280px)
+      const checkDevice = () => {
+        const width = window.innerWidth;
+        setIsMobile(width < 768);
+        setIsTablet(width >= 768 && width < 1280);
       };
-      checkMobile();
-      window.addEventListener('resize', checkMobile);
-      
-      // Hide tap hint after 5 seconds
-      const tapHintTimer = setTimeout(() => {
-        setShowTapHint(false);
-      }, 5000);
+      checkDevice();
+      window.addEventListener('resize', checkDevice);
       
       return () => {
-        window.removeEventListener('resize', checkMobile);
-        clearTimeout(tapHintTimer);
+        window.removeEventListener('resize', checkDevice);
       };
     }
   }, []);
@@ -294,53 +302,67 @@ export default function Hero({ about }) {
 
   const achievements = achievementsData.map(a => a.title);
 
-  // Handle profile tap for mobile with visual feedback
+  // Handle profile tap for mobile/tablet with visual feedback
   const handleProfileInteraction = useCallback((e) => {
     if (e) {
       e.preventDefault();
       e.stopPropagation();
     }
-    if (isMobile) {
+    // For mobile and tablet, toggle on tap
+    if (isMobile || isTablet) {
       setProfileTapped(true);
-      setIsHovering(!isHovering);
-      setShowTapHint(false);
-      // Reset tap visual feedback after animation
+      setIsHovering(prev => !prev);
       setTimeout(() => setProfileTapped(false), 200);
     }
-  }, [isMobile, isHovering]);
+  }, [isMobile, isTablet]);
+
+  // Determine if touch device (mobile or tablet)
+  const isTouchDevice = isMobile || isTablet;
 
   return (
-    <section className="section-container py-12" id="hero">
+    <section className="section-container py-8 sm:py-12" id="hero">
       <div className="mx-auto max-w-3xl">
         {/* Profile Picture with hover/tap effects */}
         <motion.div
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.5 }}
-          className="flex justify-start mb-6"
+          className="flex justify-start mb-4 sm:mb-6"
         >
           <div 
-            className={`relative h-32 w-32 cursor-pointer group transition-transform duration-200 ${profileTapped ? 'scale-95' : 'scale-100'}`}
-            onMouseEnter={() => !isMobile && setIsHovering(true)}
-            onMouseLeave={() => !isMobile && setIsHovering(false)}
+            ref={profileRef}
+            className={`relative cursor-pointer group transition-transform duration-200 select-none ${
+              profileTapped ? 'scale-95' : 'scale-100'
+            } ${isMobile ? 'h-20 w-20' : (isTablet ? 'h-24 w-24' : 'h-32 w-32')}`}
+            onMouseEnter={() => !isTouchDevice && setIsHovering(true)}
+            onMouseLeave={() => !isTouchDevice && setIsHovering(false)}
             onClick={handleProfileInteraction}
             onTouchStart={(e) => {
+              // Prevent ghost clicks
+              e.preventDefault();
+            }}
+            onTouchEnd={(e) => {
+              e.preventDefault();
               e.stopPropagation();
               handleProfileInteraction(e);
             }}
             role="button"
             tabIndex={0}
-            aria-label={isMobile ? "Tap to see alternate photo" : "Hover to see alternate photo"}
+            aria-label={isTouchDevice ? "Tap to see alternate photo" : "Hover to see alternate photo"}
             onKeyDown={(e) => e.key === 'Enter' && handleProfileInteraction(e)}
-            style={{ touchAction: 'manipulation', WebkitTapHighlightColor: 'transparent' }}
+            style={{ 
+              touchAction: 'manipulation', 
+              WebkitTapHighlightColor: 'transparent',
+              WebkitUserSelect: 'none',
+              userSelect: 'none'
+            }}
           >
-            {/* Tap indicator for mobile - shows on first load */}
-            {isMobile && showTapHint && (
+            {/* Tap indicator for mobile/tablet - always visible */}
+            {isTouchDevice && (
               <motion.div
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.8 }}
-                className="absolute -bottom-2 left-1/2 -translate-x-1/2 bg-blue-500 text-white text-[10px] px-2 py-0.5 rounded-full whitespace-nowrap z-20 shadow-lg"
+                className="absolute -bottom-5 left-1/2 -translate-x-1/2 bg-blue-500 text-white text-[9px] sm:text-[10px] px-2 py-0.5 rounded-full whitespace-nowrap z-20 shadow-lg pointer-events-none"
               >
                 Tap me!
               </motion.div>
@@ -348,38 +370,38 @@ export default function Hero({ about }) {
             
             {/* Light mode - switches between profile.jpg and hover image */}
             <Avatar 
-              className={`h-32 w-32 border-4 border-white dark:border-gray-800 liquid-glass-strong shadow-xl ring-2 ring-blue-500/15 absolute inset-0 transition-opacity duration-300 ${
-                theme === 'dark' ? 'opacity-0 pointer-events-none' : (isHovering ? 'opacity-0' : 'opacity-100')
+              className={`h-full w-full border-4 border-white dark:border-gray-800 liquid-glass-strong shadow-xl ring-2 ring-blue-500/15 absolute inset-0 transition-opacity duration-300 pointer-events-none ${
+                theme === 'dark' ? 'opacity-0' : (isHovering ? 'opacity-0' : 'opacity-100')
               }`}
             >
-              <AvatarImage src="/images/profile.jpg" alt={about.name} />
-              <AvatarFallback className="text-2xl font-bold bg-gradient-to-br from-blue-500 to-cyan-500 text-white">GLR</AvatarFallback>
+              <AvatarImage src="/images/profile.jpg" alt={about.name} draggable={false} />
+              <AvatarFallback className="text-xl sm:text-2xl font-bold bg-gradient-to-br from-blue-500 to-cyan-500 text-white">GLR</AvatarFallback>
             </Avatar>
             <Avatar 
-              className={`h-32 w-32 border-4 border-white dark:border-gray-800 liquid-glass-strong shadow-xl ring-2 ring-blue-500/15 absolute inset-0 transition-opacity duration-300 ${
-                theme === 'dark' ? 'opacity-0 pointer-events-none' : (isHovering ? 'opacity-100' : 'opacity-0 pointer-events-none')
+              className={`h-full w-full border-4 border-white dark:border-gray-800 liquid-glass-strong shadow-xl ring-2 ring-blue-500/15 absolute inset-0 transition-opacity duration-300 pointer-events-none ${
+                theme === 'dark' ? 'opacity-0' : (isHovering ? 'opacity-100' : 'opacity-0')
               }`}
             >
-              <AvatarImage src="/images/me formal hover.png" alt={about.name} />
-              <AvatarFallback className="text-2xl font-bold bg-gradient-to-br from-blue-500 to-cyan-500 text-white">GLR</AvatarFallback>
+              <AvatarImage src="/images/me formal hover.png" alt={about.name} draggable={false} />
+              <AvatarFallback className="text-xl sm:text-2xl font-bold bg-gradient-to-br from-blue-500 to-cyan-500 text-white">GLR</AvatarFallback>
             </Avatar>
             
             {/* Dark mode - switches between black formal and black hover image */}
             <Avatar 
-              className={`h-32 w-32 border-4 border-white dark:border-gray-800 liquid-glass-strong shadow-xl ring-2 ring-blue-500/15 absolute inset-0 transition-opacity duration-300 ${
-                theme === 'dark' ? (isHovering ? 'opacity-0 pointer-events-none' : 'opacity-100') : 'opacity-0 pointer-events-none'
+              className={`h-full w-full border-4 border-white dark:border-gray-800 liquid-glass-strong shadow-xl ring-2 ring-blue-500/15 absolute inset-0 transition-opacity duration-300 pointer-events-none ${
+                theme === 'dark' ? (isHovering ? 'opacity-0' : 'opacity-100') : 'opacity-0'
               }`}
             >
-              <AvatarImage src="/images/me formal black.png" alt={about.name} />
-              <AvatarFallback className="text-2xl font-bold bg-gradient-to-br from-blue-500 to-cyan-500 text-white">GLR</AvatarFallback>
+              <AvatarImage src="/images/me formal black.png" alt={about.name} draggable={false} />
+              <AvatarFallback className="text-xl sm:text-2xl font-bold bg-gradient-to-br from-blue-500 to-cyan-500 text-white">GLR</AvatarFallback>
             </Avatar>
             <Avatar 
-              className={`h-32 w-32 border-4 border-white dark:border-gray-800 liquid-glass-strong shadow-xl ring-2 ring-blue-500/15 absolute inset-0 transition-opacity duration-300 ${
-                theme === 'dark' ? (isHovering ? 'opacity-100' : 'opacity-0 pointer-events-none') : 'opacity-0 pointer-events-none'
+              className={`h-full w-full border-4 border-white dark:border-gray-800 liquid-glass-strong shadow-xl ring-2 ring-blue-500/15 absolute inset-0 transition-opacity duration-300 pointer-events-none ${
+                theme === 'dark' ? (isHovering ? 'opacity-100' : 'opacity-0') : 'opacity-0'
               }`}
             >
-              <AvatarImage src="/images/me formal black hover.png" alt={about.name} />
-              <AvatarFallback className="text-2xl font-bold bg-gradient-to-br from-blue-500 to-cyan-500 text-white">GLR</AvatarFallback>
+              <AvatarImage src="/images/me formal black hover.png" alt={about.name} draggable={false} />
+              <AvatarFallback className="text-xl sm:text-2xl font-bold bg-gradient-to-br from-blue-500 to-cyan-500 text-white">GLR</AvatarFallback>
             </Avatar>
           </div>
         </motion.div>
@@ -389,21 +411,22 @@ export default function Hero({ about }) {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2, duration: 0.5 }}
-          className="flex items-center justify-between mb-2"
+          className="flex items-center justify-between mb-1 sm:mb-2"
         >
-          <div className="flex items-center gap-2">
-            <h1 className="text-3xl font-bold text-foreground">{about.name}</h1>
-            <VerifiedBadge />
-          </div>
+          <h1 className={`font-bold text-foreground flex items-center flex-wrap ${
+            isMobile ? 'text-xl' : (isTablet ? 'text-2xl' : 'text-3xl')
+          }`}>
+            <span className="mr-0">{about.name}</span><VerifiedBadge />
+          </h1>
           <button
             onClick={toggleTheme}
-            className="p-2.5 rounded-full liquid-glass-btn hover:scale-110 transition-all"
+            className="p-2 sm:p-2.5 rounded-full liquid-glass-btn hover:scale-110 active:scale-95 transition-all flex-shrink-0 ml-2"
             aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
           >
             {theme === "dark" ? (
-              <Sun className="h-5 w-5 text-white" />
+              <Sun className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
             ) : (
-              <Moon className="h-5 w-5 text-slate-600" />
+              <Moon className="h-4 w-4 sm:h-5 sm:w-5 text-slate-600" />
             )}
           </button>
         </motion.div>
@@ -413,7 +436,7 @@ export default function Hero({ about }) {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.3, duration: 0.5 }}
-          className="text-sm text-muted-foreground mb-2 flex items-center"
+          className="text-xs sm:text-sm text-muted-foreground mb-2 flex items-center"
         >
           <LocationPin />
           {about.location}
@@ -424,74 +447,63 @@ export default function Hero({ about }) {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.4, duration: 0.5 }}
-          className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-6"
+          className={`flex flex-col gap-2 sm:gap-3 mb-4 sm:mb-6 ${
+            isMobile ? '' : 'sm:flex-row sm:items-center sm:justify-between'
+          }`}
         >
-          <p className="text-sm font-medium text-foreground/85">
+          <p className={`font-medium text-foreground/85 ${isMobile ? 'text-xs' : 'text-sm'}`}>
             Software Engineer | BSIT Student
           </p>
           <div className="relative">
             <button
               onClick={() => setAchievementsOpen(!achievementsOpen)}
-              className="flex items-center gap-2 px-4 py-2.5 liquid-glass-btn text-sm hover:scale-[1.02] transition-all border border-white/20 dark:border-white/10"
+              className={`flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 sm:py-2.5 liquid-glass-btn hover:scale-[1.02] active:scale-[0.98] transition-all border border-white/20 dark:border-white/10 ${
+                isMobile ? 'text-xs w-full justify-between' : 'text-sm'
+              }`}
             >
-              <span className="text-foreground font-medium">{achievements[0]}</span>
-              <ChevronDown className={`h-4 w-4 text-muted-foreground transition-transform duration-200 ${achievementsOpen ? 'rotate-180' : ''}`} />
+              <span className="text-foreground font-medium truncate">{achievements[0].split(' ').slice(0, 4).join(' ')}...</span>
+              <ChevronDown className={`h-3 w-3 sm:h-4 sm:w-4 text-muted-foreground transition-transform duration-200 flex-shrink-0 ${achievementsOpen ? 'rotate-180' : ''}`} />
             </button>
+            <AnimatePresence>
             {achievementsOpen && (
               <>
-                {/* Mobile backdrop */}
-                {isMobile && typeof document !== 'undefined' && createPortal(
+                {/* Backdrop for closing - only needed on touch devices */}
+                {(isMobile || isTablet) && typeof document !== 'undefined' && createPortal(
                   <div 
-                    className="fixed inset-0 z-[10000]" 
-                    onClick={() => setAchievementsOpen(false)}
-                    onTouchStart={(e) => {
-                      e.preventDefault();
+                    className="fixed inset-0 z-[9999]" 
+                    onClick={() => {
                       setAchievementsOpen(false);
+                      setHoveredAchievement(null);
                     }}
                   />,
                   document.body
                 )}
-                {/* Dropdown - rendered via portal on mobile for proper z-index */}
-                {isMobile && typeof document !== 'undefined' ? createPortal(
+                {/* Dropdown menu - rendered via portal on mobile/tablet for proper positioning */}
+                {(isMobile || isTablet) && typeof document !== 'undefined' ? createPortal(
                   <motion.div 
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -10 }}
-                    className="fixed top-24 left-4 right-4 liquid-glass-strong rounded-2xl p-5 z-[10001] max-h-[60vh] overflow-y-auto shadow-2xl"
+                    className={`fixed left-3 right-3 sm:left-4 sm:right-4 liquid-glass-strong rounded-xl sm:rounded-2xl p-3 sm:p-4 z-[10000] max-h-[55vh] overflow-y-auto shadow-2xl ${
+                      isMobile ? 'top-20' : 'top-24'
+                    }`}
                     onClick={(e) => e.stopPropagation()}
                   >
-                    <h3 className="font-semibold mb-3 text-foreground text-sm">Achievements & Awards</h3>
-                    <ul className="space-y-2.5">
+                    <h3 className="font-semibold mb-2 sm:mb-3 text-foreground text-xs sm:text-sm">Achievements & Awards</h3>
+                    <ul className="space-y-1.5 sm:space-y-2">
                       {achievementsData.map((achievement, idx) => (
                         <li 
                           key={idx} 
-                          className="text-sm flex items-start gap-2.5 text-foreground cursor-pointer hover:bg-blue-50/50 dark:hover:bg-white/10 rounded-lg px-2 py-2 transition-all duration-200 relative group"
+                          className={`flex items-start gap-2 text-foreground cursor-pointer hover:bg-blue-50/50 dark:hover:bg-white/10 rounded-lg px-2 py-1.5 sm:py-2 transition-all duration-200 active:bg-blue-100/50 dark:active:bg-white/20 ${
+                            isMobile ? 'text-xs' : 'text-sm'
+                          }`}
                           onClick={() => {
                             setHoveredAchievement(hoveredAchievement === idx ? null : idx);
                             setCarouselIndex(0);
                           }}
-                          onTouchStart={(e) => {
-                            e.stopPropagation();
-                            setHoveredAchievement(hoveredAchievement === idx ? null : idx);
-                            setCarouselIndex(0);
-                          }}
                         >
-                          <span className="text-blue-500 mt-0.5 flex-shrink-0 transition-transform duration-200 group-hover:scale-125">•</span>
-                          <span className="group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-200">{achievement.title}</span>
-                          
-                          {/* Liquid Glass Popup - Rendered via Portal for proper z-index stacking */}
-                          {hoveredAchievement === idx && createPortal(
-                            <AnimatePresence>
-                              <AchievementPopup 
-                                achievement={achievement}
-                                carouselIndex={carouselIndex}
-                                setCarouselIndex={setCarouselIndex}
-                                isMobile={isMobile}
-                                onClose={() => setHoveredAchievement(null)}
-                              />
-                            </AnimatePresence>,
-                            document.body
-                          )}
+                          <span className="text-blue-500 mt-0.5 flex-shrink-0">•</span>
+                          <span className="leading-snug">{achievement.title}</span>
                         </li>
                       ))}
                     </ul>
@@ -502,14 +514,19 @@ export default function Hero({ about }) {
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -10 }}
-                    className="absolute top-full mt-2 liquid-glass-strong rounded-2xl p-5 z-[10001] max-h-[60vh] overflow-y-auto shadow-2xl right-0 w-80"
+                    className="absolute top-full mt-2 liquid-glass-strong rounded-2xl p-4 z-[10000] max-h-[50vh] overflow-y-auto shadow-2xl right-0 w-80"
+                    onMouseLeave={() => {
+                      // Close dropdown when mouse leaves on desktop
+                      setAchievementsOpen(false);
+                      setHoveredAchievement(null);
+                    }}
                   >
                     <h3 className="font-semibold mb-3 text-foreground text-sm">Achievements & Awards</h3>
-                    <ul className="space-y-2.5">
+                    <ul className="space-y-2">
                       {achievementsData.map((achievement, idx) => (
                         <li 
                           key={idx} 
-                          className="text-sm flex items-start gap-2.5 text-foreground cursor-pointer hover:bg-blue-50/50 dark:hover:bg-white/10 rounded-lg px-2 py-2 transition-all duration-200 relative group"
+                          className="text-sm flex items-start gap-2 text-foreground cursor-pointer hover:bg-blue-50/50 dark:hover:bg-white/10 rounded-lg px-2 py-2 transition-all duration-200 relative group"
                           onMouseEnter={() => {
                             setHoveredAchievement(idx);
                             setCarouselIndex(0);
@@ -518,26 +535,28 @@ export default function Hero({ about }) {
                         >
                           <span className="text-blue-500 mt-0.5 flex-shrink-0 transition-transform duration-200 group-hover:scale-125">•</span>
                           <span className="group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-200">{achievement.title}</span>
-                          
-                          {/* Liquid Glass Popup - Rendered via Portal for proper z-index stacking */}
-                          {hoveredAchievement === idx && typeof document !== 'undefined' && createPortal(
-                            <AnimatePresence>
-                              <AchievementPopup 
-                                achievement={achievement}
-                                carouselIndex={carouselIndex}
-                                setCarouselIndex={setCarouselIndex}
-                                isMobile={isMobile}
-                                onClose={() => setHoveredAchievement(null)}
-                              />
-                            </AnimatePresence>,
-                            document.body
-                          )}
                         </li>
                       ))}
                     </ul>
                   </motion.div>
                 )}
               </>
+            )}
+            </AnimatePresence>
+            
+            {/* Achievement Popup - Rendered via Portal for ALL devices */}
+            {hoveredAchievement !== null && typeof document !== 'undefined' && createPortal(
+              <AnimatePresence>
+                <AchievementPopup 
+                  achievement={achievementsData[hoveredAchievement]}
+                  carouselIndex={carouselIndex}
+                  setCarouselIndex={setCarouselIndex}
+                  isMobile={isMobile}
+                  isTablet={isTablet}
+                  onClose={() => setHoveredAchievement(null)}
+                />
+              </AnimatePresence>,
+              document.body
             )}
           </div>
         </motion.div>
@@ -547,40 +566,48 @@ export default function Hero({ about }) {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.5, duration: 0.5 }}
-          className="flex flex-wrap gap-3"
+          className={`flex flex-wrap gap-2 sm:gap-3 ${isMobile ? 'justify-center' : ''}`}
         >
           <Button
-            className="bg-foreground dark:bg-white hover:bg-foreground/90 dark:hover:bg-gray-50 text-background dark:text-black rounded-full px-5 py-2.5 hover:scale-105 transition-all font-medium"
+            className={`bg-foreground dark:bg-white hover:bg-foreground/90 dark:hover:bg-gray-50 text-background dark:text-black rounded-full hover:scale-105 active:scale-95 transition-all font-medium ${
+              isMobile ? 'px-3 py-2 text-xs' : 'px-5 py-2.5 text-sm'
+            }`}
             asChild
           >
             <a href="mailto:ludwigrivera13@gmail.com">
-              <Mail className="h-4 w-4 mr-2" />
+              <Mail className={`mr-1.5 ${isMobile ? 'h-3 w-3' : 'h-4 w-4'}`} />
               Send Email
             </a>
           </Button>
           <Button
             variant="outline"
-            className="liquid-glass-btn border border-white/20 dark:border-white/10 text-foreground dark:text-white rounded-full px-5 py-2.5 hover:scale-105 transition-all font-medium"
+            className={`liquid-glass-btn border border-white/20 dark:border-white/10 text-foreground dark:text-white rounded-full hover:scale-105 active:scale-95 transition-all font-medium ${
+              isMobile ? 'px-3 py-2 text-xs' : 'px-5 py-2.5 text-sm'
+            }`}
             asChild
           >
             <a href="https://www.linkedin.com/in/glrrivera/" target="_blank" rel="noopener noreferrer">
-              <Linkedin className="h-4 w-4 mr-2" />
+              <Linkedin className={`mr-1.5 ${isMobile ? 'h-3 w-3' : 'h-4 w-4'}`} />
               LinkedIn
             </a>
           </Button>
           <Button
             variant="outline"
-            className="liquid-glass-btn border border-white/20 dark:border-white/10 text-foreground dark:text-white rounded-full px-5 py-2.5 hover:scale-105 transition-all font-medium"
+            className={`liquid-glass-btn border border-white/20 dark:border-white/10 text-foreground dark:text-white rounded-full hover:scale-105 active:scale-95 transition-all font-medium ${
+              isMobile ? 'px-3 py-2 text-xs' : 'px-5 py-2.5 text-sm'
+            }`}
             asChild
           >
             <a href="https://github.com/defnotwig" target="_blank" rel="noopener noreferrer">
-              <Github className="h-4 w-4 mr-2" />
+              <Github className={`mr-1.5 ${isMobile ? 'h-3 w-3' : 'h-4 w-4'}`} />
               GitHub
             </a>
           </Button>
           <Button
             variant="outline"
-            className="liquid-glass-btn border border-white/20 dark:border-white/10 text-foreground dark:text-white rounded-full px-5 py-2.5 hover:scale-105 transition-all font-medium"
+            className={`liquid-glass-btn border border-white/20 dark:border-white/10 text-foreground dark:text-white rounded-full hover:scale-105 active:scale-95 transition-all font-medium ${
+              isMobile ? 'px-3 py-2 text-xs' : 'px-5 py-2.5 text-sm'
+            }`}
             asChild
           >
             <a href="/CV_Rivera_Gabriel_Ludwig_R..pdf" download>
