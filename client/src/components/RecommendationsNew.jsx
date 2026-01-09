@@ -21,17 +21,13 @@ const TestimonialCard = ({ text, name, role }) => {
 const TestimonialsColumn = ({ testimonials, duration = 15, className = "" }) => {
   return (
     <div className={`relative overflow-hidden h-[600px] md:h-[700px] ${className}`}>
-      <motion.div
-        animate={{
-          translateY: "-50%",
-        }}
-        transition={{
-          duration: duration,
-          repeat: Infinity,
-          ease: "linear",
-          repeatType: "loop",
-        }}
+      {/* Use CSS animation instead of framer-motion for better performance */}
+      <div 
         className="flex flex-col gap-6 pb-6"
+        style={{
+          animation: `scroll-vertical ${duration}s linear infinite`,
+          willChange: 'transform',
+        }}
       >
         {[...Array(2)].map((_, arrayIndex) => (
           <div key={arrayIndex} className="flex flex-col gap-6">
@@ -45,7 +41,14 @@ const TestimonialsColumn = ({ testimonials, duration = 15, className = "" }) => 
             ))}
           </div>
         ))}
-      </motion.div>
+      </div>
+      {/* Add CSS keyframes via style tag */}
+      <style>{`
+        @keyframes scroll-vertical {
+          0% { transform: translateY(0); }
+          100% { transform: translateY(-50%); }
+        }
+      `}</style>
     </div>
   );
 };

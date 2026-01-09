@@ -513,11 +513,6 @@ export default function Hero({ about }) {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -10 }}
                     className="absolute top-full mt-2 liquid-glass-strong rounded-2xl p-4 z-[10000] max-h-[50vh] overflow-y-auto shadow-2xl right-0 w-80"
-                    onMouseLeave={() => {
-                      // Close dropdown when mouse leaves on desktop
-                      setAchievementsOpen(false);
-                      setHoveredAchievement(null);
-                    }}
                   >
                     <h3 className="font-semibold mb-3 text-foreground text-sm">Achievements & Awards</h3>
                     <ul className="space-y-2">
@@ -544,16 +539,15 @@ export default function Hero({ about }) {
             
             {/* Achievement Popup - Rendered via Portal for ALL devices */}
             {hoveredAchievement !== null && typeof document !== 'undefined' && createPortal(
-              <AnimatePresence>
-                <AchievementPopup 
-                  achievement={achievementsData[hoveredAchievement]}
-                  carouselIndex={carouselIndex}
-                  setCarouselIndex={setCarouselIndex}
-                  isMobile={isMobile}
-                  isTablet={isTablet}
-                  onClose={() => setHoveredAchievement(null)}
-                />
-              </AnimatePresence>,
+              <AchievementPopup 
+                key={hoveredAchievement}
+                achievement={achievementsData[hoveredAchievement]}
+                carouselIndex={carouselIndex}
+                setCarouselIndex={setCarouselIndex}
+                isMobile={isMobile}
+                isTablet={isTablet}
+                onClose={() => setHoveredAchievement(null)}
+              />,
               document.body
             )}
           </div>

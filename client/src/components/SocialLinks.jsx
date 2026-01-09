@@ -30,42 +30,44 @@ const socials = [
   },
 ];
 
-// Single Container Component with All Social Links
+// Single Container Component with All Social Links - Simplified without nested boxes
 export default function SocialLinks() {
   return (
     <section id="contact" className="section-container py-20">
       <div className="mx-auto max-w-3xl">
         <h2 className="text-2xl font-bold mb-8 text-foreground">Connect</h2>
 
-        {/* Single Glassmorphism Container */}
+        {/* Single Glassmorphism Container - No nested boxes */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
-          className="liquid-glass-strong p-6 md:p-8"
+          className="liquid-glass-strong p-8 md:p-10"
         >
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4 md:gap-6">
+          <div className="flex flex-wrap justify-center gap-8 md:gap-12">
             {socials.map((social, index) => {
               const Icon = social.icon;
               return (
                 <motion.a
                   key={social.label}
                   href={social.href}
-                  target="_blank"
+                  target={social.href.startsWith('mailto:') || social.href.startsWith('tel:') ? '_self' : '_blank'}
                   rel="noreferrer"
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.3, delay: index * 0.1 }}
-                  whileHover={{ y: -6, scale: 1.03 }}
-                  className="social-link-card flex flex-col items-center justify-center gap-4 p-6 md:p-8 cursor-pointer group rounded-2xl liquid-glass transition-all duration-300 hover:shadow-xl min-h-[140px] md:min-h-[160px]"
+                  whileHover={{ y: -4, scale: 1.1 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="flex flex-col items-center gap-3 cursor-pointer group"
                   aria-label={social.label}
                 >
-                  <div className="rounded-full bg-gradient-to-br from-blue-500 to-cyan-500 p-4 md:p-5 shadow-lg group-hover:shadow-2xl group-hover:scale-110 transition-all duration-300">
-                    <Icon className="h-7 w-7 md:h-8 md:w-8 text-white" strokeWidth={2} />
+                  {/* Circle icon only - no box wrapper */}
+                  <div className="rounded-full bg-gradient-to-br from-blue-500 to-cyan-500 p-4 md:p-5 shadow-lg group-hover:shadow-2xl group-hover:shadow-blue-500/25 transition-all duration-300">
+                    <Icon className="h-6 w-6 md:h-7 md:w-7 text-white" strokeWidth={2} />
                   </div>
-                  <p className="text-sm font-medium text-foreground/90 dark:text-white/90 group-hover:text-blue-500 dark:group-hover:text-blue-400 transition-colors">
+                  <p className="text-sm font-medium text-foreground/80 dark:text-white/80 group-hover:text-blue-500 dark:group-hover:text-blue-400 transition-colors">
                     {social.label}
                   </p>
                 </motion.a>
@@ -77,4 +79,5 @@ export default function SocialLinks() {
     </section>
   );
 }
+
 
