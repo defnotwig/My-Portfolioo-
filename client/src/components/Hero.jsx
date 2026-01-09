@@ -8,11 +8,11 @@ import { Button } from "@/components/ui/button";
 // iOS-style verified badge component - positioned directly after name with no gap
 const VerifiedBadge = () => (
   <svg 
-    className="h-4 w-4 sm:h-5 sm:w-5 flex-shrink-0 ml-1 inline-block align-middle" 
+    className="h-4 w-4 sm:h-5 sm:w-5 flex-shrink-0 ml-0.5 inline-block align-middle" 
     viewBox="0 0 24 24" 
     fill="none"
     aria-label="Verified"
-    style={{ marginLeft: '2px', verticalAlign: 'text-bottom' }}
+    style={{ marginLeft: '1px', verticalAlign: 'text-bottom' }}
   >
     <circle cx="12" cy="12" r="10" fill="#3B82F6" />
     <path 
@@ -101,7 +101,7 @@ const AchievementPopup = ({ achievement, carouselIndex, setCarouselIndex, isMobi
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0, scale: 0.95 }}
       transition={{ duration: 0.2, ease: "easeOut" }}
-      className="fixed inset-0 z-[10002] flex items-center justify-center p-4"
+      className="fixed inset-0 z-[10002] flex items-center justify-center p-4 w-screen h-screen"
       onClick={e => {
         e.stopPropagation();
         if (e.target === e.currentTarget) {
@@ -111,11 +111,12 @@ const AchievementPopup = ({ achievement, carouselIndex, setCarouselIndex, isMobi
     >
       {/* Semi-transparent backdrop - NO blur for clear visibility */}
       <div
-        className="absolute inset-0 bg-black/50 -z-10"
+        className="absolute inset-0 bg-black/30 -z-10"
         onClick={(e) => {
           e.stopPropagation();
           onClose?.();
         }}
+        style={{ backdropFilter: 'none', WebkitBackdropFilter: 'none', filter: 'none' }}
       />
       
       {/* Popup content container - centered and responsive */}
@@ -208,10 +209,10 @@ const AchievementPopup = ({ achievement, carouselIndex, setCarouselIndex, isMobi
       
       {/* Description - Solid background for readability */}
       <div className={`bg-white dark:bg-gray-900 border-t border-gray-200/50 dark:border-gray-700/50 ${
-        isMobile ? 'p-3' : 'p-4'
+        isMobile ? 'p-3 max-h-[30vh] overflow-y-auto' : (isTablet ? 'p-3 max-h-[25vh] overflow-y-auto' : 'p-4')
       }`}>
         <p className={`text-gray-700 dark:text-gray-300 leading-relaxed ${
-          isMobile ? 'text-xs' : (isTablet ? 'text-sm' : 'text-sm')
+          isMobile ? 'text-xs leading-5' : (isTablet ? 'text-sm leading-5' : 'text-sm leading-relaxed')
         }`}>
           {achievement.description}
         </p>
@@ -327,7 +328,7 @@ export default function Hero({ about }) {
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.5 }}
-          className="flex justify-start mb-4 sm:mb-6"
+          className={`flex justify-start ${isTouchDevice ? 'mb-10 sm:mb-12' : 'mb-4 sm:mb-6'}`}
         >
           <div 
             ref={profileRef}
@@ -337,12 +338,7 @@ export default function Hero({ about }) {
             onMouseEnter={() => !isTouchDevice && setIsHovering(true)}
             onMouseLeave={() => !isTouchDevice && setIsHovering(false)}
             onClick={handleProfileInteraction}
-            onTouchStart={(e) => {
-              // Prevent ghost clicks
-              e.preventDefault();
-            }}
             onTouchEnd={(e) => {
-              e.preventDefault();
               e.stopPropagation();
               handleProfileInteraction(e);
             }}
@@ -357,12 +353,14 @@ export default function Hero({ about }) {
               userSelect: 'none'
             }}
           >
-            {/* Tap indicator for mobile/tablet - always visible */}
-            {isTouchDevice && (
+            {/* Tap indicator for mobile/tablet - always visible, positioned below profile */}
+            {(isTouchDevice && !profileTapped) && (
               <motion.div
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
-                className="absolute -bottom-5 left-1/2 -translate-x-1/2 bg-blue-500 text-white text-[9px] sm:text-[10px] px-2 py-0.5 rounded-full whitespace-nowrap z-20 shadow-lg pointer-events-none"
+                className={`absolute left-1/2 -translate-x-1/2 bg-blue-500 text-white px-2 py-0.5 rounded-full whitespace-nowrap z-20 shadow-lg pointer-events-none ${
+                  isMobile ? '-bottom-8 text-[9px]' : '-bottom-9 text-[10px]'
+                }`}
               >
                 Tap me!
               </motion.div>
